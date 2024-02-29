@@ -1,37 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projet/blocs/comic_bloc.dart';
 import 'package:projet/blocs/movie_bloc.dart';
 import 'package:projet/blocs/series_bloc.dart';
+import 'package:projet/repositories/comic_repository.dart';
 import 'package:projet/repositories/movie_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
-import 'package:projet/screens/movies_list_screen.dart';
-import 'package:projet/screens/series_list_screen.dart';
-import 'blocs/comic_bloc.dart';
-import 'repositories/comic_repository.dart';
-import 'screens/comics_list_screen.dart';
+import 'package:projet/screens/home_screen.dart'; // Make sure to create this file
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-
+  // Repositories are instantiated here. Consider moving this to a BlocProvider if they have to be accessed globally.
   final ComicRepository comicRepository = ComicRepository();
   final SeriesRepository seriesRepository = SeriesRepository();
   final MovieRepository movieRepository = MovieRepository();
 
+  MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: BlocProvider(
-        create: (context) => ComicBloc(comicRepository: comicRepository)..add(FetchComics()),
-        child: ComicsListScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ComicBloc>(
+          create: (context) => ComicBloc(comicRepository: comicRepository)..add(FetchComics()),
+        ),
+        BlocProvider<MovieBloc>(
+          create: (context) => MovieBloc(movieRepository: movieRepository)..add(FetchMovies()),
+        ),
+        BlocProvider<SeriesBloc>(
+          create: (context) => SeriesBloc(seriesRepository: seriesRepository)..add(FetchSeriesList()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Comics App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: HomeScreen(), // Set HomePage as the initial route
       ),
     );
   }
