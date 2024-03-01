@@ -85,63 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
-            child: BottomNavigationBar(
-              backgroundColor: const Color(0xFF0F1E2B),
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_home.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_home.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Accueil',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_comics.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_comics.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Comics',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_series.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_series.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Séries',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_movies.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_movies.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Films',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_search.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_search.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Recherche',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-              ],
-              selectedItemColor: const Color(0xFF3284e7),
-              unselectedItemColor: const Color(0xFF778BA8),
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              selectedLabelStyle: const TextStyle(fontFamily: 'Nunito'),
-              unselectedLabelStyle: const TextStyle(fontFamily: 'Nunito'),
-            ),
-          ),
         ),
         Positioned(
           top: MediaQuery.of(context)
