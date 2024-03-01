@@ -9,7 +9,10 @@ abstract class MovieEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchMovies extends MovieEvent {}
+class FetchMovies extends MovieEvent {
+  final int limit;
+  FetchMovies({this.limit = 5});
+}
 
 // States
 abstract class MovieState extends Equatable {
@@ -36,7 +39,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     on<FetchMovies>((event, emit) async {
       emit(MovieLoading());
       try {
-        final movies = await movieRepository.fetchMovies();
+        final movies = await movieRepository.fetchMovies(limit: event.limit);
         emit(MoviesLoaded(movies));
       } catch (e) {
         emit(MovieError(e.toString()));

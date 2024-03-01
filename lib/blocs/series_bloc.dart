@@ -9,7 +9,10 @@ abstract class SeriesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchSeriesList extends SeriesEvent {}
+class FetchSeries extends SeriesEvent {
+  final int limit;
+  FetchSeries({this.limit = 5});
+}
 
 abstract class SeriesState extends Equatable {
   @override
@@ -19,9 +22,9 @@ abstract class SeriesState extends Equatable {
 class SeriesInitial extends SeriesState {}
 class SeriesLoading extends SeriesState {}
 class SeriesLoaded extends SeriesState {
-  final List<Series> seriesList;
+  final List<Series> series;
 
-  SeriesLoaded(this.seriesList);
+  SeriesLoaded(this.series);
 }
 class SeriesError extends SeriesState {
   final String error;
@@ -33,11 +36,11 @@ class SeriesBloc extends Bloc<SeriesEvent, SeriesState> {
   final SeriesRepository seriesRepository;
 
   SeriesBloc({required this.seriesRepository}) : super(SeriesInitial()) {
-    on<FetchSeriesList>((event, emit) async {
+    on<FetchSeries>((event, emit) async {
       emit(SeriesLoading());
       try {
-        final seriesList = await seriesRepository.fetchSeriesList();
-        emit(SeriesLoaded(seriesList));
+        final series = await seriesRepository.fetchSeries(limit: event.limit);
+        emit(SeriesLoaded(series));
       } catch (e) {
         emit(SeriesError(e.toString()));
       }

@@ -6,32 +6,31 @@ import 'package:projet/blocs/series_bloc.dart';
 import 'package:projet/repositories/comic_repository.dart';
 import 'package:projet/repositories/movie_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
-import 'package:projet/screens/home_screen.dart'; // Make sure to create this file
+import 'package:projet/screens/home_screen.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // Repositories are instantiated here. Consider moving this to a BlocProvider if they have to be accessed globally.
-  final ComicRepository comicRepository = ComicRepository();
-  final SeriesRepository seriesRepository = SeriesRepository();
-  final MovieRepository movieRepository = MovieRepository();
-
   MyApp({Key? key}) : super(key: key);
+
+  final SeriesRepository seriesRepository = SeriesRepository();
+  final ComicRepository comicRepository = ComicRepository();
+  final MovieRepository movieRepository = MovieRepository();
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<SeriesBloc>(
+          create: (context) => SeriesBloc(seriesRepository: seriesRepository),
+        ),
         BlocProvider<ComicBloc>(
-          create: (context) => ComicBloc(comicRepository: comicRepository)..add(FetchComics()),
+          create: (context) => ComicBloc(comicRepository: comicRepository),
         ),
         BlocProvider<MovieBloc>(
-          create: (context) => MovieBloc(movieRepository: movieRepository)..add(FetchMovies()),
-        ),
-        BlocProvider<SeriesBloc>(
-          create: (context) => SeriesBloc(seriesRepository: seriesRepository)..add(FetchSeriesList()),
+          create: (context) => MovieBloc(movieRepository: movieRepository),
         ),
       ],
       child: MaterialApp(
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeScreen(), // Set HomePage as the initial route
+        home: const HomeScreen(), // Set HomeScreen as the initial route
       ),
     );
   }

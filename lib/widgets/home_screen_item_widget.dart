@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ItemWidget extends StatelessWidget {
-  final String title;
-  final Color color;
+  final item;
 
-  const ItemWidget({super.key, required this.title, required this.color});
+  const ItemWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +18,23 @@ class ItemWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            height: 125,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
+         ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+            child: Image.network(
+              item.imageUrl,
+              height: 180,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 10.0),
             child: Text(
-              title,
+              item.name,
               style: const TextStyle(
                 color: Colors.white,
                 fontFamily: 'Nunito',

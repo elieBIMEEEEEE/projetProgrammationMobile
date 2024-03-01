@@ -23,7 +23,7 @@ class Series {
   factory Series.fromJson(Map<String, dynamic> json) {
     return Series(
       id: json['id'].toString(),
-      name: json['name'] ?? 'Name not available', // Utilisez l'opérateur ?? pour fournir une valeur par défaut
+      name: json['name'] ?? 'Name not available',
       deck: json['deck'] ?? '',
       description: json['description'] ?? '',
       imageUrl: json['image'] != null ? json['image']['original_url'] : 'default_image_url',

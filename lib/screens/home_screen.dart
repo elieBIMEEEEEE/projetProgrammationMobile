@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../blocs/series_bloc.dart';
+import '../blocs/comic_bloc.dart';
+import '../blocs/movie_bloc.dart';
 import '../widgets/home_screen_items_list_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<SeriesBloc>().add(FetchSeries(limit: 5));
+    context.read<ComicBloc>().add(FetchComics(limit: 5));
+    context.read<MovieBloc>().add(FetchMovies(limit: 5));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,27 +41,43 @@ class HomeScreen extends StatelessWidget {
         // Aligner le titre à gauche
         centerTitle: false,
       ),
-      body: const SafeArea(
-        // Utilisation de SafeArea ici
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              ItemsListWidget(
-                title: 'Séries populaires',
-                items: ['Titans', 'Young Justice: Outsiders'],
-                color: Color(0xFFFF8100), // Couleur orange pour le carré
+              BlocBuilder<SeriesBloc, SeriesState>(
+                builder: (context, state) {
+                  if (state is SeriesLoaded) {
+                    return ItemsListWidget(
+                      title: 'Séries populaires',
+                      items: state.series,
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
               ),
-              ItemsListWidget(
-                title: 'Comics populaires',
-                items: ['The Silver Surfer', 'Wonder Woman'],
-                color: Color(0xFFFF8100), // Couleur orange pour le carré
+              BlocBuilder<ComicBloc, ComicState>(
+                builder: (context, state) {
+                  if (state is ComicsLoaded) {
+                    return ItemsListWidget(
+                      title: 'Comics populaires',
+                      items: state.comics,
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
               ),
-              ItemsListWidget(
-                title: 'Films populaires',
-                items: ['Iron Man', 'X-Men'],
-                color: Color(0xFFFF8100), // Couleur orange pour le carré
+              BlocBuilder<MovieBloc, MovieState>(
+                builder: (context, state) {
+                  if (state is MoviesLoaded) {
+                    return ItemsListWidget(
+                      title: 'Films populaires',
+                      items: state.movies,
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
               ),
-              // Ajoutez ici d'autres sections selon votre maquette
             ],
           ),
         ),
@@ -57,7 +89,6 @@ class HomeScreen extends StatelessWidget {
         ),
         child: BottomNavigationBar(
           backgroundColor: const Color(0xFF0F1E2B),
-          // Couleur de fond de la barre
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: SvgPicture.asset('assets/icons/navbar_home.svg',
@@ -101,7 +132,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
           selectedItemColor: const Color(0xFF3284e7),
-          // Couleur des éléments sélectionnés mise à jour
           unselectedItemColor: const Color(0xFF778BA8),
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,

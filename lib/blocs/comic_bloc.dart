@@ -8,7 +8,10 @@ abstract class ComicEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchComics extends ComicEvent {}
+class FetchComics extends ComicEvent {
+  final int limit;
+  FetchComics({this.limit = 5});
+}
 
 abstract class ComicState extends Equatable {
   @override
@@ -35,7 +38,7 @@ class ComicBloc extends Bloc<ComicEvent, ComicState> {
     on<FetchComics>((event, emit) async {
       emit(ComicLoading());
       try {
-        final comics = await comicRepository.fetchComics();
+        final comics = await comicRepository.fetchComics(limit: event.limit);
         emit(ComicsLoaded(comics));
       } catch (e) {
         emit(ComicError(e.toString()));

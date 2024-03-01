@@ -6,8 +6,8 @@ class MovieRepository {
   final String _baseUrl = 'https://comicvine.gamespot.com/api';
   final String _apiKey = '6db50ee6d46842bad12ce3ecbf244c7aae2f9041';
 
-  Future<List<Movie>> fetchMovies({int limit = 10, int offset = 0}) async {
-    final url = Uri.parse('$_baseUrl/movies?api_key=$_apiKey&format=json&limit=$limit&offset=$offset');
+  Future<List<Movie>> fetchMovies({int limit = 10}) async {
+    final url = Uri.parse('$_baseUrl/movies?api_key=$_apiKey&format=json&limit=$limit&offset=10');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

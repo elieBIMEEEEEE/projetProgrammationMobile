@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'home_screen_item_widget.dart'; // Assurez-vous que le chemin d'importation est correct
 
-class ItemsListWidget extends StatelessWidget {
+class ItemsListWidget<T> extends StatelessWidget {
   final String title;
-  final List<String> items;
-  final Color color;
+  final List<T> items;
 
   const ItemsListWidget(
       {super.key,
       required this.title,
-      required this.items,
-      required this.color});
+      required this.items,});
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +71,13 @@ class ItemsListWidget extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 200,
+            height: 255,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
                 return ItemWidget(
-                    title: items[index],
-                    color:
-                        color);
+                    item: items[index]);
               },
             ),
           ),

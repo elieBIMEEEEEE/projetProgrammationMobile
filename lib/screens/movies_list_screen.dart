@@ -27,7 +27,7 @@ class MoviesListScreen extends StatelessWidget {
                   final movie = state.movies[index];
                   return ListTile(
                     title: Text(movie.name),
-                    subtitle: Text("Release Date: ${movie.releaseDate}"),
+                    subtitle: Text("Release Date: ${movie.imageUrl}"),
                     // Ajoutez plus de détails ici, comme le box office revenue, etc.
                   );
                 },

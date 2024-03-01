@@ -11,7 +11,7 @@ class SeriesListScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final bloc = SeriesBloc(seriesRepository: SeriesRepository());
-        bloc.add(FetchSeriesList()); // Déclenche l'événement immédiatement après la création du bloc
+        bloc.add(FetchSeries()); // Déclenche l'événement immédiatement après la création du bloc
         return bloc;
       },
       child: Scaffold(
@@ -22,9 +22,9 @@ class SeriesListScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is SeriesLoaded) {
               return ListView.builder(
-                itemCount: state.seriesList.length,
+                itemCount: state.series.length,
                 itemBuilder: (context, index) {
-                  final series = state.seriesList[index];
+                  final series = state.series[index];
                   return ListTile(
                     title: Text(series.name),
                     subtitle: Text("Episodes: ${series.countOfEpisodes}"),
