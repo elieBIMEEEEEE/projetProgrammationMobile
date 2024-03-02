@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:projet/screens/series_list_screen.dart';
 import '../blocs/series_bloc.dart';
 import '../blocs/comic_bloc.dart';
 import '../blocs/movie_bloc.dart';
 import '../widgets/home_screen_items_list_widget.dart';
+import 'comics_list_screen.dart';
+import 'movies_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Function(int) onViewMorePressed;
+
+  const HomeScreen({super.key, required this.onViewMorePressed});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -17,9 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<SeriesBloc>().add(FetchSeries(limit: 5));
-    context.read<ComicBloc>().add(FetchComics(limit: 5));
-    context.read<MovieBloc>().add(FetchMovies(limit: 5));
+    context.read<SeriesBloc>().add(FetchSeries(limit: 50));
+    context.read<ComicBloc>().add(FetchComics(limit: 50));
+    context.read<MovieBloc>().add(FetchMovies(limit: 50));
   }
 
   @override
@@ -36,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 fontFamily: 'Nunito',
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -53,7 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state is SeriesLoaded) {
                         return ItemsListWidget(
                           title: 'Séries populaires',
-                          items: state.series,
+                          items: state.series.take(5).toList(),
+                          onViewMorePressed: (index) {
+                            widget.onViewMorePressed(1);
+                          },
                         );
                       }
                       return const CircularProgressIndicator();
@@ -64,7 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state is ComicsLoaded) {
                         return ItemsListWidget(
                           title: 'Comics populaires',
-                          items: state.comics,
+                          items: state.comics.take(5).toList(),
+                          onViewMorePressed: (index) {
+                            widget.onViewMorePressed(2);
+                          },
                         );
                       }
                       return const CircularProgressIndicator();
@@ -75,7 +86,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state is MoviesLoaded) {
                         return ItemsListWidget(
                           title: 'Films populaires',
-                          items: state.movies,
+                          items: state.movies.take(5).toList(),
+                          onViewMorePressed: (index) {
+                            widget.onViewMorePressed(3);
+                          },
                         );
                       }
                       return const CircularProgressIndicator();
@@ -83,63 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-            ),
-          ),
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
-            child: BottomNavigationBar(
-              backgroundColor: const Color(0xFF0F1E2B),
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_home.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_home.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Accueil',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_comics.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_comics.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Comics',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_series.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_series.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Séries',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_movies.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_movies.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Films',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/navbar_search.svg',
-                      color: const Color(0xFF778BA8)),
-                  activeIcon: SvgPicture.asset('assets/icons/navbar_search.svg',
-                      color: const Color(0xFF3284e7)),
-                  label: 'Recherche',
-                  backgroundColor: const Color(0xFF0F1E2B),
-                ),
-              ],
-              selectedItemColor: const Color(0xFF3284e7),
-              unselectedItemColor: const Color(0xFF778BA8),
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              selectedLabelStyle: const TextStyle(fontFamily: 'Nunito'),
-              unselectedLabelStyle: const TextStyle(fontFamily: 'Nunito'),
             ),
           ),
         ),

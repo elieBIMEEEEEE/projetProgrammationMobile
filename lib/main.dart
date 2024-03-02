@@ -6,7 +6,7 @@ import 'package:projet/blocs/series_bloc.dart';
 import 'package:projet/repositories/comic_repository.dart';
 import 'package:projet/repositories/movie_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
-import 'package:projet/screens/home_screen.dart';
+import 'package:projet/screens/main_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const HomeScreen(), // Set HomeScreen as the initial route
+        home: MainScreen(), // Set HomeScreen as the initial route
       ),
     );
   }

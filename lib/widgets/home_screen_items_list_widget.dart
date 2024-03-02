@@ -4,11 +4,14 @@ import 'home_screen_item_widget.dart'; // Assurez-vous que le chemin d'importati
 class ItemsListWidget<T> extends StatelessWidget {
   final String title;
   final List<T> items;
+  final Function(int) onViewMorePressed;
 
-  const ItemsListWidget(
-      {super.key,
-      required this.title,
-      required this.items,});
+  const ItemsListWidget({
+    super.key,
+    required this.title,
+    required this.items,
+    required this.onViewMorePressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +51,10 @@ class ItemsListWidget<T> extends StatelessWidget {
                 ),
                 const Spacer(),
                 InkWell(
-                  onTap: () {
-                    // Action pour "Voir plus"
-                  },
+                  onTap: () => onViewMorePressed(0),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 6.0),
                     decoration: BoxDecoration(
                       color: const Color(0xFF0f1921),
                       borderRadius: BorderRadius.circular(6.0),
@@ -76,8 +78,7 @@ class ItemsListWidget<T> extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
-                return ItemWidget(
-                    item: items[index]);
+                return ItemWidget(item: items[index]);
               },
             ),
           ),

@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:projet/models/comic.dart';
 
 class ItemWidget extends StatelessWidget {
-  final item;
+  final dynamic item; // Assurez-vous que `item` peut contenir n'importe quel type de données.
 
   const ItemWidget({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
+    String displayText;
+    if (item is Comic) {
+      displayText = item.volume['name'] ?? 'Unknown';
+      displayText += ' - ' + ' #' + item.issueNumber + ' - ' + item.name;
+    } else {
+      displayText = item.name;
+    }
+
     return Container(
       width: 150,
       margin: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
@@ -18,7 +27,7 @@ class ItemWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-         ClipRRect(
+          ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
@@ -30,11 +39,10 @@ class ItemWidget extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10.0, 10.0),
             child: Text(
-              item.name,
+              displayText,
               style: const TextStyle(
                 color: Colors.white,
                 fontFamily: 'Nunito',
