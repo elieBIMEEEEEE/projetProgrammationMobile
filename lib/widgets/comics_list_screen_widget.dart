@@ -19,8 +19,11 @@ class ComicCard extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting('fr_FR', null);
 
-    final coverDate = DateFormat('MMMM yyyy', 'fr_FR')
+    String coverDate = DateFormat('MMMM yyyy', 'fr_FR')
         .format(DateTime.parse(comic.coverDate));
+
+    coverDate = coverDate.replaceFirst(coverDate[0], coverDate[0].toUpperCase());
+
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -72,26 +75,32 @@ class ComicCard extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.only(top: 14.0, bottom: 14.0, right: 14.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      comic.name,
+                      comic.volume['name'] ?? 'Unknown',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
+                      maxLines: 1,
                     ),
                     Text(
                       comic.name,
                       style: const TextStyle(
-                        color: Colors.grey,
+                        color: Colors.white,
                         fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+
                     Row(
                       children: [
                         SvgPicture.asset(

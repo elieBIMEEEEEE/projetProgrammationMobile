@@ -11,11 +11,6 @@ class ComicsListScreen extends StatefulWidget {
 }
 
 class _ComicListScreenState extends State<ComicsListScreen> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<ComicBloc>().add(FetchComics(limit: 50));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +18,22 @@ class _ComicListScreenState extends State<ComicsListScreen> {
       backgroundColor: const Color(0xFF152630),
       appBar: AppBar(
         backgroundColor: const Color(0xFF152630),
-        title: const Text(
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
             'Comics les plus populaires',
             style: TextStyle(
               fontFamily: 'Nunito',
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
+            maxLines: 2, // Permet au texte de s'étendre sur deux lignes
+          ),
         ),
+        toolbarHeight: 100, // Augmente la hauteur de l'AppBar
       ),
+
       body: BlocBuilder<ComicBloc, ComicState>(
         builder: (context, state) {
           if (state is ComicLoading) {

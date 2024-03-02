@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:projet/screens/movies_list_screen.dart';
+import 'package:projet/screens/series_list_screen.dart';
 
 import 'home_screen.dart';
 import 'comics_list_screen.dart';
@@ -12,18 +13,26 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  late final List<Widget> _screens;
 
-  final List<Widget> _screens = [
-    HomeScreen(), // Votre HomeScreen existant
-    ComicsListScreen(), // Votre nouvel écran de liste de comics
-    // Ajoutez d'autres écrans ici selon vos besoins
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      HomeScreen(onViewMorePressed: onItemTapped),
+      SeriesListScreen(),
+      ComicsListScreen(),
+      MoviesListScreen(),
+      // Ajoutez d'autres écrans ici selon vos besoins.
+    ];
+  }
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +60,19 @@ class _MainScreenState extends State<MainScreen> {
               backgroundColor: const Color(0xFF0F1E2B),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/icons/navbar_comics.svg',
-                  color: const Color(0xFF778BA8)),
-              activeIcon: SvgPicture.asset('assets/icons/navbar_comics.svg',
-                  color: const Color(0xFF3284e7)),
-              label: 'Comics',
-              backgroundColor: const Color(0xFF0F1E2B),
-            ),
-            BottomNavigationBarItem(
               icon: SvgPicture.asset('assets/icons/navbar_series.svg',
                   color: const Color(0xFF778BA8)),
               activeIcon: SvgPicture.asset('assets/icons/navbar_series.svg',
                   color: const Color(0xFF3284e7)),
               label: 'Séries',
+              backgroundColor: const Color(0xFF0F1E2B),
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/navbar_comics.svg',
+                  color: const Color(0xFF778BA8)),
+              activeIcon: SvgPicture.asset('assets/icons/navbar_comics.svg',
+                  color: const Color(0xFF3284e7)),
+              label: 'Comics',
               backgroundColor: const Color(0xFF0F1E2B),
             ),
             BottomNavigationBarItem(
@@ -90,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
           selectedLabelStyle: const TextStyle(fontFamily: 'Nunito'),
           unselectedLabelStyle: const TextStyle(fontFamily: 'Nunito'),
           currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
+          onTap: onItemTapped,
         ),
       ),
 
