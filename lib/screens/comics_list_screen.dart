@@ -25,7 +25,7 @@ class _ComicListScreenState extends State<ComicsListScreen> {
             style: TextStyle(
               fontFamily: 'Nunito',
               color: Colors.white,
-              fontSize: 30,
+              fontSize: 33,
               fontWeight: FontWeight.bold,
             ),
             maxLines: 2, // Permet au texte de s'étendre sur deux lignes
