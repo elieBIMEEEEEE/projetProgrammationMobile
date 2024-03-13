@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:projet/screens/series_list_screen.dart';
 import '../blocs/series_bloc.dart';
 import '../blocs/comic_bloc.dart';
 import '../blocs/movie_bloc.dart';
 import '../widgets/home_screen_items_list_widget.dart';
-import 'comics_list_screen.dart';
-import 'movies_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int) onViewMorePressed;

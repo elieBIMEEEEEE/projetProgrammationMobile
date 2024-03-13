@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../models/movie.dart';
 
-import '../models/comic.dart'; // Replace with the correct path to your Comic model
-
-class ComicCard extends StatelessWidget {
-  final Comic comic;
+class MovieCard extends StatelessWidget {
+  final Movie movie;
   final int rank;
 
-  const ComicCard({
+  const MovieCard({
     Key? key,
-    required this.comic,
+    required this.movie,
     required this.rank,
   }) : super(key: key);
 
@@ -19,11 +18,10 @@ class ComicCard extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting('fr_FR', null);
 
-    String coverDate = DateFormat('MMMM yyyy', 'fr_FR')
-        .format(DateTime.parse(comic.coverDate.toString()));
+    String coverDate = DateFormat('yyyy', 'fr_FR')
+        .format(DateTime.parse(movie.releaseDate.toString()));
 
     coverDate = coverDate.replaceFirst(coverDate[0], coverDate[0].toUpperCase());
-
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -43,8 +41,8 @@ class ComicCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8), // Apply the border radius here
                     child: Image.network(
-                      comic.imageUrl,
-                      width: 80,
+                      movie.imageUrl,
+                      width: 120,
                       height: 120,
                       fit: BoxFit.cover,
                     ),
@@ -81,21 +79,11 @@ class ComicCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      comic.volume['name'] ?? 'Unknown',
+                      movie.name,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                      ),
-                      maxLines: 1,
-                    ),
-                    Text(
-                      comic.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -110,7 +98,7 @@ class ComicCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'N°${comic.issueNumber}',
+                          '${movie.runtime} minutes',
                           style: const TextStyle(
                             color: Colors.white70,
                           ),

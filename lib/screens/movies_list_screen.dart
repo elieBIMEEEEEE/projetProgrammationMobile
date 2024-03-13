@@ -1,43 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/movie_bloc.dart'; // Assurez-vous que le chemin d'accès est correct
-import '../repositories/movie_repository.dart';
+import '../blocs/comic_bloc.dart';
+import '../blocs/movie_bloc.dart';
+import '../widgets/movies_list_screen_widget.dart';
 
-class MoviesListScreen extends StatelessWidget {
+class MoviesListScreen extends StatefulWidget {
   const MoviesListScreen({Key? key}) : super(key: key);
 
   @override
+  _MoviesListScreenState createState() => _MoviesListScreenState();
+}
+
+class _MoviesListScreenState extends State<MoviesListScreen> {
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final bloc = MovieBloc(movieRepository: MovieRepository());
-        bloc.add(FetchMovies()); // Déclenche l'événement immédiatement après la création du bloc
-        return bloc;
-      },
-      child: Scaffold(
-        appBar: AppBar(title: const Text("Movies List")),
-        body: BlocBuilder<MovieBloc, MovieState>(
-          builder: (context, state) {
-            if (state is MovieLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is MoviesLoaded) {
-              return ListView.builder(
-                itemCount: state.movies.length,
-                itemBuilder: (context, index) {
-                  final movie = state.movies[index];
-                  return ListTile(
-                    title: Text(movie.name),
-                    subtitle: Text("Release Date: ${movie.imageUrl}"),
-                    // Ajoutez plus de détails ici, comme le box office revenue, etc.
-                  );
-                },
-              );
-            } else if (state is MovieError) {
-              return Center(child: Text(state.message));
-            }
-            return const Center(child: Text("Fetch Movies by dispatching FetchMovies Event"));
-          },
+    return Scaffold(
+      backgroundColor: const Color(0xFF152630),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF152630),
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Films les plus populaires',
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              color: Colors.white,
+              fontSize: 33,
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 2, // Permet au texte de s'étendre sur deux lignes
+          ),
         ),
+        toolbarHeight: 100, // Augmente la hauteur de l'AppBar
+      ),
+
+      body: BlocBuilder<MovieBloc, MovieState>(
+        builder: (context, state) {
+          if (state is MovieLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is MoviesLoaded) {
+            return ListView.builder(
+              itemCount: state.movies.length,
+              itemBuilder: (context, index) {
+                return MovieCard(movie: state.movies[index], rank: index + 1);
+              },
+            );
+          } else if (state is ComicError) {
+            return const Center(child: Text('Erreur: Impossible de charger les comics'));
+          }
+          return Container(); // Fallback empty container
+        },
       ),
     );
   }
