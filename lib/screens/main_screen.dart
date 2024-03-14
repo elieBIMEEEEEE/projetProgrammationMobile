@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:projet/screens/movies_list_screen.dart';
+import 'package:projet/screens/search_screen.dart';
 import 'package:projet/screens/series_list_screen.dart';
-
-import 'home_screen.dart';
-import 'comics_list_screen.dart';
+import 'package:projet/screens/comics_list_screen.dart';
+import 'package:projet/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -20,10 +20,10 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _screens = [
       HomeScreen(onViewMorePressed: onItemTapped),
-      SeriesListScreen(),
-      ComicsListScreen(),
-      MoviesListScreen(),
-      // Ajoutez d'autres écrans ici selon vos besoins.
+      const SeriesListScreen(),
+      const ComicsListScreen(),
+      const MoviesListScreen(),
+       SearchScreen(),
     ];
   }
 

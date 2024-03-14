@@ -5,12 +5,14 @@ class ItemsListWidget<T> extends StatelessWidget {
   final String title;
   final List<T> items;
   final Function(int) onViewMorePressed;
+  final bool hasVoirPlus;
 
   const ItemsListWidget({
     super.key,
     required this.title,
     required this.items,
     required this.onViewMorePressed,
+    this.hasVoirPlus = true,
   });
 
   @override
@@ -50,25 +52,7 @@ class ItemsListWidget<T> extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                InkWell(
-                  onTap: () => onViewMorePressed(0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 6.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0f1921),
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    child: const Text(
-                      "Voir plus",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontFamily: 'Nunito',
-                      ),
-                    ),
-                  ),
-                ),
+                _buildVoirPlusButton(),
               ],
             ),
           ),
@@ -85,5 +69,30 @@ class ItemsListWidget<T> extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildVoirPlusButton() {
+    if (hasVoirPlus) {
+      return InkWell(
+        onTap: () => onViewMorePressed(0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0f1921),
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          child: const Text(
+            "Voir plus",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontFamily: 'Nunito',
+            ),
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }

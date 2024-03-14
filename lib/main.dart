@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projet/blocs/comic_bloc.dart';
 import 'package:projet/blocs/movie_bloc.dart';
+import 'package:projet/blocs/search_bloc.dart';
 import 'package:projet/blocs/series_bloc.dart';
 import 'package:projet/repositories/comic_repository.dart';
 import 'package:projet/repositories/movie_repository.dart';
@@ -31,6 +32,13 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<MovieBloc>(
           create: (context) => MovieBloc(movieRepository: movieRepository),
+        ),
+        BlocProvider<SearchBloc>(
+          create: (context) => SearchBloc(
+            movieRepository: movieRepository,
+            seriesRepository: seriesRepository,
+            comicRepository: comicRepository,
+          ),
         ),
       ],
       child: MaterialApp(
