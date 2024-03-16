@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
       const SeriesListScreen(),
       const ComicsListScreen(),
       const MoviesListScreen(),
-       SearchScreen(),
+       const SearchScreen(),
     ];
   }
 

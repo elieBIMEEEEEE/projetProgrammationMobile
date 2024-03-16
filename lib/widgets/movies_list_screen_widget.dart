@@ -18,9 +18,7 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting('fr_FR', null);
 
-    String coverDate = DateFormat('yyyy', 'fr_FR')
-        .format(DateTime.parse(movie.releaseDate.toString()));
-
+    String coverDate = DateFormat('yyyy', 'fr_FR').format(DateTime.parse(movie.releaseDate));
     coverDate = coverDate.replaceFirst(coverDate[0], coverDate[0].toUpperCase());
 
     return Container(

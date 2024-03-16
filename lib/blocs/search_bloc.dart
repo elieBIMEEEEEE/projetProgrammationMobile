@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projet/models/character.dart';
 import 'package:projet/models/comic.dart';
-import 'package:projet/models/movie.dart';
 import 'package:projet/models/series.dart';
 import 'package:projet/repositories/comic_repository.dart';
-import 'package:projet/repositories/movie_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
+
+import '../repositories/character_repository.dart';
 
 abstract class SearchEvent extends Equatable {
   const SearchEvent();
@@ -35,14 +36,14 @@ class SearchLoading extends SearchState {
 }
 
 class SearchSuccess extends SearchState {
-  final List<Movie> movies;
+  final List<Character> characters;
   final List<Series> series;
   final List<Comic> comics;
 
-  SearchSuccess(this.movies, this.series, this.comics);
+  SearchSuccess(this.characters, this.series, this.comics);
 
   @override
-  List<Object> get props => [movies, series, comics];
+  List<Object> get props => [characters, series, comics];
 }
 
 class SearchFailure extends SearchState {
@@ -55,12 +56,12 @@ class SearchFailure extends SearchState {
 }
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  final MovieRepository movieRepository;
+  final CharacterRepository characterRepository;
   final SeriesRepository seriesRepository;
   final ComicRepository comicRepository;
 
   SearchBloc({
-    required this.movieRepository,
+    required this.characterRepository,
     required this.seriesRepository,
     required this.comicRepository,
   }) : super(SearchInitial()) {
@@ -77,10 +78,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
     emit(SearchLoading());
     try {
-      final movies = await movieRepository.searchMovies(event.query);
+      final characters = await characterRepository.searchCharacters(event.query);
       final series = await seriesRepository.searchSeries(event.query);
       final comics = await comicRepository.searchComics(event.query);
-      emit(SearchSuccess(movies, series, comics));
+      emit(SearchSuccess(characters, series, comics));
     } catch (error) {
       emit(SearchFailure(error.toString()));
     }

@@ -4,6 +4,7 @@ import 'package:projet/blocs/comic_bloc.dart';
 import 'package:projet/blocs/movie_bloc.dart';
 import 'package:projet/blocs/search_bloc.dart';
 import 'package:projet/blocs/series_bloc.dart';
+import 'package:projet/repositories/character_repository.dart';
 import 'package:projet/repositories/comic_repository.dart';
 import 'package:projet/repositories/movie_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   final SeriesRepository seriesRepository = SeriesRepository();
   final ComicRepository comicRepository = ComicRepository();
   final MovieRepository movieRepository = MovieRepository();
+  final CharacterRepository characterRepository = CharacterRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(
-            movieRepository: movieRepository,
+            characterRepository: characterRepository,
             seriesRepository: seriesRepository,
             comicRepository: comicRepository,
           ),

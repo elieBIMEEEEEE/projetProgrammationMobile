@@ -93,9 +93,9 @@ class _SearchScreenState extends State<SearchScreen> {
           } else if (state is SearchFailure) {
             return Center(child: Text('Erreur de recherche : ${state.error}',
                 style: const TextStyle(color: Colors.red)));
-            }
-                return _buildSearchPrompt();
-          },
+          }
+          return _buildSearchPrompt();
+        },
       ),
     );
   }
@@ -106,22 +106,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
     List<Widget> widgets = [];
 
-    if (searchState.series.isNotEmpty) {
+    if (searchState.characters.isNotEmpty) {
       widgets.add(
         ItemsListWidget(
-          title: 'Séries',
-          items: searchState.series.take(5).toList(),
-          onViewMorePressed: (index) {},
-          hasVoirPlus: false,
-        ),
-      );
-    }
-
-    if (searchState.movies.isNotEmpty) {
-      widgets.add(
-        ItemsListWidget(
-          title: 'Films',
-          items: searchState.movies.take(5).toList(),
+          title: 'Personnages',
+          items: searchState.characters.take(5).toList(),
           onViewMorePressed: (index) {},
           hasVoirPlus: false,
         ),
@@ -143,6 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return widgets;
   }
+
   Widget _buildSearchPrompt() {
     return Stack(
       clipBehavior: Clip.none,

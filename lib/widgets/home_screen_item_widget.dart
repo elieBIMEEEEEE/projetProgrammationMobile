@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projet/models/comic.dart';
 
 class ItemWidget extends StatelessWidget {
-  final dynamic item; // Assurez-vous que `item` peut contenir n'importe quel type de données.
+  final dynamic item;
 
   const ItemWidget({super.key, required this.item});
 
@@ -10,8 +10,8 @@ class ItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String displayText;
     if (item is Comic) {
-      displayText = item.volume['name'] ?? 'Unknown';
-      displayText += ' - ' + ' #' + item.issueNumber + ' - ' + item.name;
+      displayText = item.volume['name'];
+      displayText += '${' -  #' + item.issueNumber} - ' + item.name;
     } else {
       displayText = item.name;
     }
