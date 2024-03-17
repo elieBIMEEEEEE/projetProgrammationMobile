@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../blocs/series_bloc.dart';
 import '../blocs/comic_bloc.dart';
-import '../blocs/movie_bloc.dart';
+import '../blocs/movies_bloc.dart';
 import '../widgets/home_screen_items_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     context.read<SeriesBloc>().add(FetchSeries(limit: 50));
     context.read<ComicBloc>().add(FetchComics(limit: 50));
-    context.read<MovieBloc>().add(FetchMovies(limit: 50));
+    context.read<MoviesBloc>().add(FetchMovies(limit: 50));
   }
 
   @override
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return const CircularProgressIndicator();
                     },
                   ),
-                  BlocBuilder<MovieBloc, MovieState>(
+                  BlocBuilder<MoviesBloc, MoviesState>(
                     builder: (context, state) {
                       if (state is MoviesLoaded) {
                         return ItemsListWidget(

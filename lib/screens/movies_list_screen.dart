@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/comic_bloc.dart';
-import '../blocs/movie_bloc.dart';
+import '../blocs/movies_bloc.dart';
 import '../widgets/movies_list_screen_widget.dart';
 
 class MoviesListScreen extends StatefulWidget {
@@ -35,9 +35,9 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         toolbarHeight: 100, // Augmente la hauteur de l'AppBar
       ),
 
-      body: BlocBuilder<MovieBloc, MovieState>(
+      body: BlocBuilder<MoviesBloc, MoviesState>(
         builder: (context, state) {
-          if (state is MovieLoading) {
+          if (state is MoviesLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MoviesLoaded) {
             return ListView.builder(

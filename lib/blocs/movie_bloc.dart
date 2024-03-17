@@ -9,9 +9,10 @@ abstract class MovieEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchMovies extends MovieEvent {
-  final int limit;
-  FetchMovies({this.limit = 5});
+class FetchMovie extends MovieEvent {
+  final String id;
+
+  FetchMovie({required this.id});
 }
 
 // States
@@ -21,13 +22,18 @@ abstract class MovieState extends Equatable {
 }
 
 class MovieInitial extends MovieState {}
+
 class MovieLoading extends MovieState {}
-class MoviesLoaded extends MovieState {
-  final List<Movie> movies;
-  MoviesLoaded(this.movies);
+
+class MovieLoaded extends MovieState {
+  final Movie movie;
+
+  MovieLoaded(this.movie);
 }
+
 class MovieError extends MovieState {
   final String message;
+
   MovieError(this.message);
 }
 
@@ -36,11 +42,11 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository movieRepository;
 
   MovieBloc({required this.movieRepository}) : super(MovieInitial()) {
-    on<FetchMovies>((event, emit) async {
+    on<FetchMovie>((event, emit) async {
       emit(MovieLoading());
       try {
-        final movies = await movieRepository.fetchMovies(limit: event.limit);
-        emit(MoviesLoaded(movies));
+        final movie = await movieRepository.fetchMovie(id: event.id);
+        emit(MovieLoaded(movie));
       } catch (e) {
         emit(MovieError(e.toString()));
       }
