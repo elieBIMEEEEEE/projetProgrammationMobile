@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projet/blocs/character_bloc.dart';
 import 'package:projet/blocs/comic_bloc.dart';
 import 'package:projet/blocs/movies_bloc.dart';
 import 'package:projet/blocs/search_bloc.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<MovieBloc>(
           create: (context) => MovieBloc(movieRepository: movieRepository),
+        ),
+        BlocProvider<CharacterBloc>(
+          create: (context) => CharacterBloc(characterRepository: characterRepository),
         ),
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(

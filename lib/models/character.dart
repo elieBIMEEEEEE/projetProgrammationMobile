@@ -1,23 +1,28 @@
 class Character {
-  final String id;
-  final String imageUrl;
-  final String name;
+  late final String id;
+  late final String imageUrl;
+  late final String name;
+  late final String apiDetailUrl;
 
   Character({
     required this.id,
-    required this.imageUrl,
-    required this.name,  });
+    required this.name,
+    required this.apiDetailUrl,
+  });
 
   factory Character.fromJson(Map<String, dynamic> json) {
-    String defaultImageUrl = 'https://www.placecage.com/200/300';
     String id = json['id']?.toString() ?? '0000';
     String name = json['name']?.toString() ?? 'Unknown';
-    String imageUrl = json['image'] != null ? json['image']['original_url'] ?? defaultImageUrl : defaultImageUrl;
+    String apiDetailUrl = json['api_detail_url']?.toString() ?? 'Unknown';
 
     return Character(
       id: id,
-      imageUrl: imageUrl,
       name: name,
+      apiDetailUrl: apiDetailUrl,
     );
+  }
+
+  void updateFromJson(Map<String, dynamic> json) {
+    imageUrl = json['image'] != null ? json['image']['original_url'] ?? 'path/to/image' : 'path/to/image';
   }
 }

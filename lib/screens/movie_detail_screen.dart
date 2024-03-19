@@ -6,7 +6,9 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_svg/svg.dart';
+import '../blocs/character_bloc.dart';
 import '../blocs/movie_bloc.dart';
+import '../models/character.dart';
 import '../models/movie.dart';
 
 class MovieDetailScreen extends StatefulWidget {
@@ -69,6 +71,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
           if (state is MovieLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MovieLoaded && state.movie.id == widget.movieId) {
+            context.read<CharacterBloc>().add(FetchsCharacterDetails(characters: state.movie.characters));
             return _buildMovieDetail(context, state.movie);
           } else if (state is MovieError) {
             return Center(
@@ -192,7 +195,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
                         controller: _tabController,
                         children: [
                           _buildWebView(movie.description),
-                          const Center(child: Text('Characters Content')),
+                          _buildCharacters(movie.characters),
                           _buildInfos(movie),
                         ],
                       ),
@@ -240,6 +243,45 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
     );
   }
 
+  Widget _buildCharacters(List<Character> characters) {
+    return BlocBuilder<CharacterBloc, CharacterState>(
+      builder: (context, state) {
+        if (state is CharactersDetailsLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is CharactersDetailsLoaded) {
+          return ListView.builder(
+            itemCount: state.characters.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    state.characters[index].imageUrl,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: Text(
+                  state.characters[index].name,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            },
+          );
+        } else if (state is CharactersDetailsError) {
+          return Center(
+              child: Text('Erreur: ${state.message}',
+                  style: const TextStyle(color: Colors.white)));
+        }
+        return const Center(
+            child: Text('Aucun personnage trouvé',
+                style: TextStyle(color: Colors.white)));
+      },
+    );
+  }
+
+
   String formatRevenue(String revenueString) {
     double revenue = double.tryParse(revenueString.replaceAll(r'$', '')) ?? 0;
     if (revenue >= 1000000) {
@@ -254,7 +296,6 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
       return "$revenue \$";
     }
   }
-
 
   Widget _buildInfos(Movie movie) {
     return ListView(
