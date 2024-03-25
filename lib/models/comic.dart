@@ -1,10 +1,17 @@
-class Comic {
+import 'package:projet/models/person.dart';
+import 'character.dart';
+
+class Comic{
   final String id;
   final String imageUrl;
   final String name;
   final Map<String, dynamic> volume;
   final String issueNumber;
   final String coverDate;
+  final List<Character> characters;
+  final List<Person> creators;
+  final String description;
+  final String apiDetailUrl;
 
   Comic({
     required this.id,
@@ -13,6 +20,10 @@ class Comic {
     required this.volume,
     required this.issueNumber,
     required this.coverDate,
+    required this.characters,
+    required this.creators,
+    required this.description,
+    required this.apiDetailUrl,
   });
 
   factory Comic.fromJson(Map<String, dynamic> json) {
@@ -23,6 +34,10 @@ class Comic {
     Map<String, dynamic> volume = json['volume'] ?? {};
     String issueNumber = json['issue_number']?.toString() ?? 'Unknown';
     String coverDate = json['cover_date']?.toString() ?? 'Unknown';
+    List<Character> characters = (json['character_credits'] as List<dynamic>?)?.map((e) => Character.fromJson(e)).toList() ?? [];
+    List<Person> creators = (json['person_credits'] as List<dynamic>?)?.map((e) => Person.fromJson(e)).toList() ?? [];
+    String description = json['description']?.toString() ?? '';
+    String apiDetailUrl = json['api_detail_url']?.toString() ?? '';
 
     return Comic(
       id: id,
@@ -31,6 +46,10 @@ class Comic {
       volume: volume,
       issueNumber: issueNumber,
       coverDate: coverDate,
+      characters: characters,
+      creators: creators,
+      description: description,
+      apiDetailUrl: apiDetailUrl,
     );
   }
 }

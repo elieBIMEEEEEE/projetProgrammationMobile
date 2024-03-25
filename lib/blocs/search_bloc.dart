@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projet/models/character.dart';
-import 'package:projet/models/comic.dart';
+import 'package:projet/models/comics.dart';
 import 'package:projet/models/series.dart';
-import 'package:projet/repositories/comic_repository.dart';
+import 'package:projet/repositories/comics_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
 
 import '../repositories/character_repository.dart';
@@ -38,7 +38,7 @@ class SearchLoading extends SearchState {
 class SearchSuccess extends SearchState {
   final List<Character> characters;
   final List<Series> series;
-  final List<Comic> comics;
+  final List<Comics> comics;
 
   SearchSuccess(this.characters, this.series, this.comics);
 
@@ -58,7 +58,7 @@ class SearchFailure extends SearchState {
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final CharacterRepository characterRepository;
   final SeriesRepository seriesRepository;
-  final ComicRepository comicRepository;
+  final ComicsRepository comicRepository;
 
   SearchBloc({
     required this.characterRepository,

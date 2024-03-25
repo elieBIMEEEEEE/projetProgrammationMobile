@@ -16,6 +16,7 @@ class Movie {
   final List<Studio> studios;
   final String description;
   final String rating;
+  final String apiDetailUrl;
 
   Movie({
     required this.id,
@@ -32,6 +33,7 @@ class Movie {
     required this.studios,
     required this.description,
     required this.rating,
+    required this.apiDetailUrl,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class Movie {
     List<Studio> studios = (json['studios'] as List<dynamic>?)?.map((e) => Studio.fromJson(e)).toList() ?? [];
     String description = json['description']?.toString() ?? 'Unknown';
     String rating = json['rating']?.toString() ?? 'Unknown';
+    String apiDetailUrl = json['api_detail_url']?.toString() ?? 'Unknown';
 
     return Movie(
       id: id,
@@ -66,6 +69,7 @@ class Movie {
       studios: studios,
       description: description,
       rating: rating,
+      apiDetailUrl: apiDetailUrl,
     );
   }
 }

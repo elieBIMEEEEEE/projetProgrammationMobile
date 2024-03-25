@@ -1,36 +1,40 @@
-class Movies {
+class Comics {
   final String id;
   final String imageUrl;
   final String name;
-  final String releaseDate;
-  final String runtime;
+  final Map<String, dynamic> volume;
+  final String issueNumber;
+  final String coverDate;
   final String apiDetailUrl;
 
-  Movies({
+  Comics({
     required this.id,
     required this.imageUrl,
     required this.name,
-    required this.releaseDate,
-    required this.runtime,
+    required this.volume,
+    required this.issueNumber,
+    required this.coverDate,
     required this.apiDetailUrl,
   });
 
-  factory Movies.fromJson(Map<String, dynamic> json) {
+  factory Comics.fromJson(Map<String, dynamic> json) {
     String defaultImageUrl = 'https://www.placecage.com/200/300';
     String id = json['id']?.toString() ?? '0000';
     String name = json['name']?.toString() ?? 'Unknown';
     String imageUrl = json['image'] != null ? json['image']['original_url'] ?? defaultImageUrl : defaultImageUrl;
-    String releaseDate = json['release_date']?.toString() ?? 'Unknown';
-    String runtime = json['runtime']?.toString() ?? 'Unknown';
+    Map<String, dynamic> volume = json['volume'] ?? {};
+    String issueNumber = json['issue_number']?.toString() ?? 'Unknown';
+    String coverDate = json['cover_date']?.toString() ?? 'Unknown';
     String apiDetailUrl = json['api_detail_url']?.toString() ?? 'Unknown';
 
-    return Movies(
+    return Comics(
       id: id,
       imageUrl: imageUrl,
       name: name,
-      releaseDate: releaseDate,
-      runtime: runtime,
+      volume: volume,
+      issueNumber: issueNumber,
+      coverDate: coverDate,
       apiDetailUrl: apiDetailUrl,
-      );
+    );
   }
 }

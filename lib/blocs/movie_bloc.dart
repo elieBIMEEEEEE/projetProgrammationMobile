@@ -10,9 +10,9 @@ abstract class MovieEvent extends Equatable {
 }
 
 class FetchMovie extends MovieEvent {
-  final String id;
+  final String apiDetailUrl;
 
-  FetchMovie({required this.id});
+  FetchMovie({required this.apiDetailUrl});
 }
 
 // States
@@ -45,7 +45,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     on<FetchMovie>((event, emit) async {
       emit(MovieLoading());
       try {
-        final movie = await movieRepository.fetchMovie(id: event.id);
+        final movie = await movieRepository.fetchMovie(apiUrl: event.apiDetailUrl);
         emit(MovieLoaded(movie));
       } catch (e) {
         emit(MovieError(e.toString()));

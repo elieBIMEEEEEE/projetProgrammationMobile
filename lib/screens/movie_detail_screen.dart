@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,9 +10,9 @@ import '../models/character.dart';
 import '../models/movie.dart';
 
 class MovieDetailScreen extends StatefulWidget {
-  final String movieId;
+  final String apiDetailUrl;
 
-  MovieDetailScreen({Key? key, required this.movieId}) : super(key: key);
+  MovieDetailScreen({Key? key, required this.apiDetailUrl}) : super(key: key);
 
   @override
   _MovieDetailScreenState createState() => _MovieDetailScreenState();
@@ -28,7 +26,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    context.read<MovieBloc>().add(FetchMovie(id: widget.movieId));
+    context.read<MovieBloc>().add(FetchMovie(apiDetailUrl: widget.apiDetailUrl));
   }
 
   @override
@@ -47,7 +45,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
         elevation: 0,
         title: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
-            if (state is MovieLoaded && state.movie.id == widget.movieId) {
+            if (state is MovieLoaded && state.movie.apiDetailUrl == widget.apiDetailUrl) {
               return Text(
                 state.movie.name,
                 style: const TextStyle(
@@ -70,7 +68,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
         builder: (context, state) {
           if (state is MovieLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is MovieLoaded && state.movie.id == widget.movieId) {
+          } else if (state is MovieLoaded && state.movie.apiDetailUrl == widget.apiDetailUrl) {
             context.read<CharacterBloc>().add(FetchsCharacterDetails(characters: state.movie.characters));
             return _buildMovieDetail(context, state.movie);
           } else if (state is MovieError) {
@@ -120,7 +118,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
                     children: [
                       SvgPicture.asset(
                         'assets/icons/ic_movie_bicolor.svg',
-                        color: const Color(0xFF778BA8),
+                        color: Colors.white,
                         width: 16,
                       ),
                       const SizedBox(width: 10),
@@ -135,7 +133,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
                     children: [
                       SvgPicture.asset(
                         'assets/icons/ic_calendar_bicolor.svg',
-                        color: const Color(0xFF778BA8),
+                        color: Colors.white,
                         width: 16,
                       ),
                       const SizedBox(width: 10),
@@ -254,7 +252,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
             itemBuilder: (context, index) {
               return ListTile(
                 leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                   child: Image.network(
                     state.characters[index].imageUrl,
                     width: 50,

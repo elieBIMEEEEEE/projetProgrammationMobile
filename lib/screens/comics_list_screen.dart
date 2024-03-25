@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/comic_bloc.dart';
+import '../blocs/comics_bloc.dart';
 import '../widgets/comics_list_screen_widget.dart';
 
 class ComicsListScreen extends StatefulWidget {
@@ -34,9 +34,9 @@ class _ComicListScreenState extends State<ComicsListScreen> {
         toolbarHeight: 100, // Augmente la hauteur de l'AppBar
       ),
 
-      body: BlocBuilder<ComicBloc, ComicState>(
+      body: BlocBuilder<ComicsBloc, ComicsState>(
         builder: (context, state) {
-          if (state is ComicLoading) {
+          if (state is ComicsLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ComicsLoaded) {
             return ListView.builder(
@@ -45,7 +45,7 @@ class _ComicListScreenState extends State<ComicsListScreen> {
                 return ComicCard(comic: state.comics[index], rank: index + 1);
               },
             );
-          } else if (state is ComicError) {
+          } else if (state is ComicsError) {
             return const Center(child: Text('Erreur: Impossible de charger les comics'));
           }
           return Container(); // Fallback empty container
