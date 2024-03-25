@@ -231,11 +231,17 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
   }
 
   Widget _buildWebView(String url) {
-    return WebView(
-      initialUrl: 'about:blank',
-      onWebViewCreated: (WebViewController webViewController) {
-        webViewController.loadUrl(Uri.dataFromString(
-          '''
+    if (url.isEmpty) {
+      return const Center(
+          child: Text(
+              "Aucune description n'est disponible dans notre base de données.",
+              style: TextStyle(color: Colors.white)));
+    } else {
+      return WebView(
+        initialUrl: 'about:blank',
+        onWebViewCreated: (WebViewController webViewController) {
+          webViewController.loadUrl(Uri.dataFromString(
+            '''
   <html lang="en">
   <head title="comic">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
@@ -256,93 +262,110 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
   <body>$url</body>
   </html>
   ''',
-          mimeType: 'text/html',
-          encoding: Encoding.getByName('utf-8'),
-        ).toString());
-      },
-    );
+            mimeType: 'text/html',
+            encoding: Encoding.getByName('utf-8'),
+          ).toString());
+        },
+      );
+    }
   }
 
   Widget _buildCreators(List<Person> characters) {
-    context.read<PersonBloc>().add(FetchPersonDetails(persons: characters));
-    return BlocBuilder<PersonBloc, PersonState>(
-      builder: (context, state) {
-        if (state is PersonsDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is PersonsDetailsLoaded) {
-          return ListView.builder(
-            itemCount: state.persons.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Image.network(
-                    state.persons[index].imageUrl,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
+    if (characters.isEmpty) {
+      return const Center(
+          child: Text(
+              "Aucun auteur n'est disponible dans notre base de données.",
+              style: TextStyle(color: Colors.white)));
+    } else {
+      context.read<PersonBloc>().add(FetchPersonDetails(persons: characters));
+      return BlocBuilder<PersonBloc, PersonState>(
+        builder: (context, state) {
+          if (state is PersonsDetailsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is PersonsDetailsLoaded) {
+            return ListView.builder(
+              itemCount: state.persons.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Image.network(
+                      state.persons[index].imageUrl,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                title: Text(
-                  state.persons[index].name,
-                  style: const TextStyle(color: Colors.white),
-                ),
-                subtitle: Text(
-                  state.persons[index].country,
-                  style: const TextStyle(
-                      color: Colors.white70, fontStyle: FontStyle.italic),
-                ),
-              );
-            },
-          );
-        } else if (state is PersonsDetailsError) {
-          return Center(
-              child: Text('Erreur: ${state.message}',
-                  style: const TextStyle(color: Colors.white)));
-        }
-        return const Center(
-            child: Text('Aucun personnage trouvé',
-                style: TextStyle(color: Colors.white)));
-      },
-    );
+                  title: Text(
+                    state.persons[index].name,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  subtitle: Text(
+                    state.persons[index].country,
+                    style: const TextStyle(
+                        color: Colors.white70, fontStyle: FontStyle.italic),
+                  ),
+                );
+              },
+            );
+          } else if (state is PersonsDetailsError) {
+            return Center(
+                child: Text('Erreur: ${state.message}',
+                    style: const TextStyle(color: Colors.white)));
+          }
+          return const Center(
+              child: Text('Aucun personnage trouvé',
+                  style: TextStyle(color: Colors.white)));
+        },
+      );
+    }
   }
 
   Widget _buildCharacters(List<Character> characters) {
-    context.read<CharacterBloc>().add(FetchsCharacterDetails(characters: characters));
-    return BlocBuilder<CharacterBloc, CharacterState>(
-      builder: (context, state) {
-        if (state is CharactersDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is CharactersDetailsLoaded){
-          return ListView.builder(
-            itemCount: state.characters.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Image.network(
-                    state.characters[index].imageUrl,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
+    if (characters.isEmpty) {
+      return const Center(
+          child: Text(
+              "Aucun personnage n'est disponible dans notre base de données.",
+              style: TextStyle(color: Colors.white)));
+    } else {
+      context
+          .read<CharacterBloc>()
+          .add(FetchsCharacterDetails(characters: characters));
+      return BlocBuilder<CharacterBloc, CharacterState>(
+        builder: (context, state) {
+          if (state is CharactersDetailsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is CharactersDetailsLoaded) {
+            return ListView.builder(
+              itemCount: state.characters.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Image.network(
+                      state.characters[index].imageUrl,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                title: Text(
-                  state.characters[index].name,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              );
-            },
-          );
-        } else if (state is CharactersDetailsError) {
-          return Center(
-              child: Text('Erreur: ${state.message}',
-                  style: const TextStyle(color: Colors.white)));
-        }
-        return const Center(
-            child: Text('Aucun personnage trouvé',
-                style: TextStyle(color: Colors.white)));
-      },
-    );
+                  title: Text(
+                    state.characters[index].name,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
+              },
+            );
+          } else if (state is CharactersDetailsError) {
+            return Center(
+                child: Text('Erreur: ${state.message}',
+                    style: const TextStyle(color: Colors.white)));
+          }
+          return const Center(
+              child: Text('Aucun personnage trouvé',
+                  style: TextStyle(color: Colors.white)));
+        },
+      );
+    }
   }
 }

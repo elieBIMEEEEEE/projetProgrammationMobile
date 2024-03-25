@@ -12,11 +12,13 @@ import 'package:projet/repositories/comics_repository.dart';
 import 'package:projet/repositories/movie_repository.dart';
 import 'package:projet/repositories/movies_repository.dart';
 import 'package:projet/repositories/person_repository.dart';
+import 'package:projet/repositories/serie_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
 import 'package:projet/screens/main_screen.dart';
 
 import 'blocs/comic_bloc.dart';
 import 'blocs/movie_bloc.dart';
+import 'blocs/serie_bloc.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
   final MovieRepository movieRepository = MovieRepository();
   final CharacterRepository characterRepository = CharacterRepository();
   final PersonRepository personRepository = PersonRepository();
+  final SerieRepository serieRepository = SerieRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +60,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PersonBloc>(
           create: (context) => PersonBloc(personRepository: personRepository),
+        ),
+        BlocProvider<SerieBloc>(
+          create: (context) => SerieBloc(serieRepository: serieRepository),
         ),
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(
