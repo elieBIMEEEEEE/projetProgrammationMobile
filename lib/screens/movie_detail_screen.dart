@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,9 +10,9 @@ import '../models/character.dart';
 import '../models/movie.dart';
 
 class MovieDetailScreen extends StatefulWidget {
-  final String movieId;
+  final String apiDetailUrl;
 
-  MovieDetailScreen({Key? key, required this.movieId}) : super(key: key);
+  MovieDetailScreen({Key? key, required this.apiDetailUrl}) : super(key: key);
 
   @override
   _MovieDetailScreenState createState() => _MovieDetailScreenState();
@@ -28,7 +26,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    context.read<MovieBloc>().add(FetchMovie(id: widget.movieId));
+    context
+        .read<MovieBloc>()
+        .add(FetchMovie(apiDetailUrl: widget.apiDetailUrl));
   }
 
   @override
@@ -47,7 +47,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
         elevation: 0,
         title: BlocBuilder<MovieBloc, MovieState>(
           builder: (context, state) {
-            if (state is MovieLoaded && state.movie.id == widget.movieId) {
+            if (state is MovieLoaded &&
+                state.movie.apiDetailUrl == widget.apiDetailUrl) {
               return Text(
                 state.movie.name,
                 style: const TextStyle(
@@ -70,8 +71,10 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
         builder: (context, state) {
           if (state is MovieLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is MovieLoaded && state.movie.id == widget.movieId) {
-            context.read<CharacterBloc>().add(FetchsCharacterDetails(characters: state.movie.characters));
+          } else if (state is MovieLoaded &&
+              state.movie.apiDetailUrl == widget.apiDetailUrl) {
+            context.read<CharacterBloc>().add(
+                FetchsCharacterDetails(characters: state.movie.characters));
             return _buildMovieDetail(context, state.movie);
           } else if (state is MovieError) {
             return Center(
@@ -120,7 +123,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
                     children: [
                       SvgPicture.asset(
                         'assets/icons/ic_movie_bicolor.svg',
-                        color: const Color(0xFF778BA8),
+                        color: Colors.white,
                         width: 16,
                       ),
                       const SizedBox(width: 10),
@@ -135,7 +138,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
                     children: [
                       SvgPicture.asset(
                         'assets/icons/ic_calendar_bicolor.svg',
-                        color: const Color(0xFF778BA8),
+                        color: Colors.white,
                         width: 16,
                       ),
                       const SizedBox(width: 10),
@@ -211,11 +214,17 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
   }
 
   Widget _buildWebView(String url) {
-    return WebView(
-      initialUrl: 'about:blank',
-      onWebViewCreated: (WebViewController webViewController) {
-        webViewController.loadUrl(Uri.dataFromString(
-          '''
+    if (url.isEmpty) {
+      return const Center(
+          child: Text(
+              "Aucune description n'est disponible dans notre base de données.",
+              style: TextStyle(color: Colors.white)));
+    } else {
+      return WebView(
+        initialUrl: 'about:blank',
+        onWebViewCreated: (WebViewController webViewController) {
+          webViewController.loadUrl(Uri.dataFromString(
+            '''
   <html lang="en">
   <head title="movie">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
@@ -236,51 +245,58 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
   <body>$url</body>
   </html>
   ''',
-          mimeType: 'text/html',
-          encoding: Encoding.getByName('utf-8'),
-        ).toString());
-      },
-    );
+            mimeType: 'text/html',
+            encoding: Encoding.getByName('utf-8'),
+          ).toString());
+        },
+      );
+    }
   }
 
   Widget _buildCharacters(List<Character> characters) {
-    return BlocBuilder<CharacterBloc, CharacterState>(
-      builder: (context, state) {
-        if (state is CharactersDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is CharactersDetailsLoaded) {
-          return ListView.builder(
-            itemCount: state.characters.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    state.characters[index].imageUrl,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
+    if (characters.isEmpty) {
+      return const Center(
+          child: Text(
+              "Aucun personnage n'est disponible dans notre base de données.",
+              style: TextStyle(color: Colors.white)));
+    } else {
+      return BlocBuilder<CharacterBloc, CharacterState>(
+        builder: (context, state) {
+          if (state is CharactersDetailsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is CharactersDetailsLoaded) {
+            return ListView.builder(
+              itemCount: state.characters.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Image.network(
+                      state.characters[index].imageUrl,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                title: Text(
-                  state.characters[index].name,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              );
-            },
-          );
-        } else if (state is CharactersDetailsError) {
-          return Center(
-              child: Text('Erreur: ${state.message}',
-                  style: const TextStyle(color: Colors.white)));
-        }
-        return const Center(
-            child: Text('Aucun personnage trouvé',
-                style: TextStyle(color: Colors.white)));
-      },
-    );
+                  title: Text(
+                    state.characters[index].name,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
+              },
+            );
+          } else if (state is CharactersDetailsError) {
+            return Center(
+                child: Text('Erreur: ${state.message}',
+                    style: const TextStyle(color: Colors.white)));
+          }
+          return const Center(
+              child: Text('Aucun personnage trouvé',
+                  style: TextStyle(color: Colors.white)));
+        },
+      );
+    }
   }
-
 
   String formatRevenue(String revenueString) {
     double revenue = double.tryParse(revenueString.replaceAll(r'$', '')) ?? 0;
@@ -290,7 +306,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
     } else if (revenue >= 1000) {
       double formattedRevenue = revenue / 1000;
       return "${formattedRevenue.toStringAsFixed(2)} mille \$";
-    } else if(revenue == 0){
+    } else if (revenue == 0) {
       return "Inconnu";
     } else {
       return "$revenue \$";
@@ -298,19 +314,29 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
   }
 
   Widget _buildInfos(Movie movie) {
-    return ListView(
-      children: [
-        _buildDetailItem('Classification', movie.rating),
-        _buildDetailItem('Scénaristes', movie.writers.map((e) => e.name).join(', ')),
-        _buildDetailItem('Producteurs', movie.producers.map((e) => e.name).join(', ')),
-        _buildDetailItem('Studios', movie.studios.map((e) => e.name).join(', ')),
-        _buildDetailItem('Budget', formatRevenue(movie.budget)),
-        _buildDetailItem(
-            'Recettes au box-office', formatRevenue(movie.boxOfficeRevenue)),
-        _buildDetailItem(
-            'Recettes brutes totales', formatRevenue(movie.totalRevenue)),
-      ],
-    );
+    if (movie.rating.isEmpty) {
+      return const Center(
+          child: Text(
+              "Aucune information n'est disponible dans notre base de données.",
+              style: TextStyle(color: Colors.white)));
+    } else {
+      return ListView(
+        children: [
+          _buildDetailItem('Classification', movie.rating),
+          _buildDetailItem(
+              'Scénaristes', movie.writers.map((e) => e.name).join(', ')),
+          _buildDetailItem(
+              'Producteurs', movie.producers.map((e) => e.name).join(', ')),
+          _buildDetailItem(
+              'Studios', movie.studios.map((e) => e.name).join(', ')),
+          _buildDetailItem('Budget', formatRevenue(movie.budget)),
+          _buildDetailItem(
+              'Recettes au box-office', formatRevenue(movie.boxOfficeRevenue)),
+          _buildDetailItem(
+              'Recettes brutes totales', formatRevenue(movie.totalRevenue)),
+        ],
+      );
+    }
   }
 
   Widget _buildDetailItem(String title, String value) {

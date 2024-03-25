@@ -1,36 +1,36 @@
-class Movies {
+class Episode {
   final String id;
-  final String imageUrl;
   final String name;
-  final String releaseDate;
-  final String runtime;
+  final String imageUrl;
+  final String airDate;
   final String apiDetailUrl;
+  final String episodeNumber;
 
-  Movies({
+  Episode({
     required this.id,
-    required this.imageUrl,
     required this.name,
-    required this.releaseDate,
-    required this.runtime,
+    required this.imageUrl,
+    required this.airDate,
     required this.apiDetailUrl,
+    required this.episodeNumber,
   });
 
-  factory Movies.fromJson(Map<String, dynamic> json) {
+  factory Episode.fromJson(Map<String, dynamic> json) {
     String defaultImageUrl = 'https://www.placecage.com/200/300';
     String id = json['id']?.toString() ?? '0000';
     String name = json['name']?.toString() ?? 'Unknown';
     String imageUrl = json['image'] != null ? json['image']['original_url'] ?? defaultImageUrl : defaultImageUrl;
-    String releaseDate = json['release_date']?.toString() ?? 'Unknown';
-    String runtime = json['runtime']?.toString() ?? 'Unknown';
+    String airDate = json['air_date']?.toString() ?? 'Unknown';
     String apiDetailUrl = json['api_detail_url']?.toString() ?? 'Unknown';
+    String episodeNumber = json['episode_number']?.toString() ?? 'Unknown';
 
-    return Movies(
+    return Episode(
       id: id,
       imageUrl: imageUrl,
       name: name,
-      releaseDate: releaseDate,
-      runtime: runtime,
+      airDate: airDate,
       apiDetailUrl: apiDetailUrl,
-      );
+      episodeNumber: episodeNumber,
+    );
   }
 }

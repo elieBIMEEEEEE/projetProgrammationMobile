@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../blocs/series_bloc.dart';
-import '../blocs/comic_bloc.dart';
+import '../blocs/comics_bloc.dart';
 import '../blocs/movies_bloc.dart';
 import '../widgets/home_screen_items_list_widget.dart';
 
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<SeriesBloc>().add(FetchSeries(limit: 50));
-    context.read<ComicBloc>().add(FetchComics(limit: 50));
+    context.read<ComicsBloc>().add(FetchComics(limit: 50));
     context.read<MoviesBloc>().add(FetchMovies(limit: 50));
   }
 
@@ -61,10 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         );
                       }
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     },
                   ),
-                  BlocBuilder<ComicBloc, ComicState>(
+                  BlocBuilder<ComicsBloc, ComicsState>(
                     builder: (context, state) {
                       if (state is ComicsLoaded) {
                         return ItemsListWidget(
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         );
                       }
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     },
                   ),
                   BlocBuilder<MoviesBloc, MoviesState>(
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         );
                       }
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     },
                   ),
                 ],

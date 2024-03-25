@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/comic_bloc.dart';
+import '../blocs/comics_bloc.dart';
 import '../blocs/movies_bloc.dart';
 import '../widgets/movies_list_screen_widget.dart';
 
@@ -46,7 +46,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                 return MovieCard(movie: state.movies[index], rank: index + 1);
               },
             );
-          } else if (state is ComicError) {
+          } else if (state is ComicsError) {
             return const Center(child: Text('Erreur: Impossible de charger les comics'));
           }
           return Container(); // Fallback empty container

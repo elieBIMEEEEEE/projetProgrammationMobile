@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projet/models/comic.dart';
+import 'package:projet/models/comics.dart';
 
 class ItemWidget extends StatelessWidget {
   final dynamic item;
@@ -9,7 +9,7 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String displayText;
-    if (item is Comic) {
+    if (item is Comics) {
       displayText = item.volume['name'];
       displayText += '${' -  #' + item.issueNumber} - ' + item.name;
     } else {

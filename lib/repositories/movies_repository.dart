@@ -8,7 +8,7 @@ class MoviesRepository {
 
   Future<List<Movies>> fetchMovies({int limit = 10}) async {
     final url = Uri.parse(
-        '$_baseUrl/movies?api_key=$_apiKey&format=json&limit=$limit&offset=10');
+        '$_baseUrl/movies?api_key=$_apiKey&format=json&limit=$limit&offset=10&field_list=id,image,name,release_date,runtime,api_detail_url');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
