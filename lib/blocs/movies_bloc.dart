@@ -14,18 +14,30 @@ class FetchMovies extends MoviesEvent {
   FetchMovies({this.limit = 5});
 }
 
-// States
+class MoviesLoadMore extends MoviesEvent {
+  final int limit;
+  MoviesLoadMore({this.limit = 5});
+}
+
 abstract class MoviesState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
 class MoviesInitial extends MoviesState {}
+
 class MoviesLoading extends MoviesState {}
+
 class MoviesLoaded extends MoviesState {
   final List<Movies> movies;
-  MoviesLoaded(this.movies);
+  final DateTime timestamp;
+
+  MoviesLoaded(this.movies) : timestamp = DateTime.now();
+
+  @override
+  List<Object> get props => [movies, timestamp];
 }
+
 class MoviesError extends MoviesState {
   final String message;
   MoviesError(this.message);
@@ -43,6 +55,18 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         emit(MoviesLoaded(movies));
       } catch (e) {
         emit(MoviesError(e.toString()));
+      }
+    });
+
+    on<MoviesLoadMore>((event, emit) async {
+      final currentState = state;
+      if (currentState is MoviesLoaded) {
+        try {
+          final movies = await moviesRepository.fetchMovies(limit: event.limit, offset: currentState.movies.length);
+          emit(MoviesLoaded([...currentState.movies, ...movies]));
+        } catch (e) {
+          emit(MoviesError(e.toString()));
+        }
       }
     });
   }

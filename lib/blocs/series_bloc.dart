@@ -14,18 +14,31 @@ class FetchSeries extends SeriesEvent {
   FetchSeries({this.limit = 5});
 }
 
+class SeriesLoadMore extends SeriesEvent {
+  final int limit;
+  SeriesLoadMore({this.limit = 5});
+}
+
 abstract class SeriesState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
 class SeriesInitial extends SeriesState {}
+
 class SeriesLoading extends SeriesState {}
+
 class SeriesLoaded extends SeriesState {
   final List<Series> series;
+  final DateTime timestamp;
 
-  SeriesLoaded(this.series);
+  SeriesLoaded(this.series) : timestamp = DateTime.now();
+
+  @override
+  List<Object> get props => [series, timestamp];
+
 }
+
 class SeriesError extends SeriesState {
   final String error;
 
@@ -43,6 +56,18 @@ class SeriesBloc extends Bloc<SeriesEvent, SeriesState> {
         emit(SeriesLoaded(series));
       } catch (e) {
         emit(SeriesError(e.toString()));
+      }
+    });
+
+    on<SeriesLoadMore>((event, emit) async {
+      final currentState = state;
+      if (currentState is SeriesLoaded) {
+        try {
+          final series = await seriesRepository.fetchSeries(limit: event.limit, offset: currentState.series.length);
+          emit(SeriesLoaded([...currentState.series, ...series]));
+        } catch (e) {
+          emit(SeriesError(e.toString()));
+        }
       }
     });
   }

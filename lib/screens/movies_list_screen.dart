@@ -12,6 +12,32 @@ class MoviesListScreen extends StatefulWidget {
 }
 
 class _MoviesListScreenState extends State<MoviesListScreen> {
+  final ScrollController _scrollController = ScrollController();
+  final int _scrollThreshold = 50;
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final MoviesBloc moviesBloc = context.read<MoviesBloc>();
+
+    if (maxScroll - currentScroll <= _scrollThreshold && !_isLoadingMore) {
+      _isLoadingMore = true;
+      moviesBloc.add(MoviesLoadMore(limit: 20));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +60,25 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         ),
         toolbarHeight: 100, // Augmente la hauteur de l'AppBar
       ),
-
       body: BlocBuilder<MoviesBloc, MoviesState>(
         builder: (context, state) {
           if (state is MoviesLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MoviesLoaded) {
+            _isLoadingMore = false;
             return ListView.builder(
-              itemCount: state.movies.length,
+              controller: _scrollController,
+              itemCount: state.movies.length + 1,
               itemBuilder: (context, index) {
+                if (index >= state.movies.length) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 return MovieCard(movie: state.movies[index], rank: index + 1);
               },
             );
           } else if (state is ComicsError) {
-            return const Center(child: Text('Erreur: Impossible de charger les comics'));
+            return const Center(
+                child: Text('Erreur: Impossible de charger les comics'));
           }
           return Container(); // Fallback empty container
         },

@@ -11,6 +11,32 @@ class SeriesListScreen extends StatefulWidget {
 }
 
 class _SeriesListScreenState extends State<SeriesListScreen> {
+  final ScrollController _scrollController = ScrollController();
+  final int _scrollThreshold = 50;
+  bool _isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final SeriesBloc seriesBloc = context.read<SeriesBloc>();
+
+    if (maxScroll - currentScroll <= _scrollThreshold && !_isLoadingMore) {
+      _isLoadingMore = true;
+      seriesBloc.add(SeriesLoadMore(limit: 20));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +54,30 @@ class _SeriesListScreenState extends State<SeriesListScreen> {
               fontSize: 33,
               fontWeight: FontWeight.bold,
             ),
-            maxLines: 2, // Permet au texte de s'étendre sur deux lignes
+            maxLines: 2,
           ),
         ),
-        toolbarHeight: 100, // Augmente la hauteur de l'AppBar
+        toolbarHeight: 100,
       ),
-
       body: BlocBuilder<SeriesBloc, SeriesState>(
         builder: (context, state) {
           if (state is SeriesLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is SeriesLoaded) {
+            _isLoadingMore = false;
             return ListView.builder(
-              itemCount: state.series.length,
+              controller: _scrollController,
+              itemCount: state.series.length + 1,
               itemBuilder: (context, index) {
+                if (index >= state.series.length) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 return SeriesCard(serie: state.series[index], rank: index + 1);
               },
             );
           } else if (state is SeriesError) {
-            return const Center(child: Text('Erreur: Impossible de charger les comics'));
+            return const Center(
+                child: Text('Erreur: Impossible de charger les comics'));
           }
           return Container(); // Fallback empty container
         },
