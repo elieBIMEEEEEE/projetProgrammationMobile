@@ -117,6 +117,17 @@ class _SearchScreenState extends State<SearchScreen> {
       );
     }
 
+    if (searchState.persons.isNotEmpty) {
+      widgets.add(
+        ItemsListWidget(
+          title: 'Personnes',
+          items: searchState.persons.take(5).toList(),
+          onViewMorePressed: (index) {},
+          hasVoirPlus: false,
+        ),
+      );
+    }
+
     if (searchState.comics.isNotEmpty) {
       widgets.add(
         ItemsListWidget(

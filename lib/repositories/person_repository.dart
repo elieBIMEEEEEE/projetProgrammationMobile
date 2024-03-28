@@ -46,7 +46,7 @@ Future<List<Person>> fetchPersonsDetails(List<Person> persons) async {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final results = List<Map<String, dynamic>>.from(data['results']);
-      return results.map((json) => Person.fromJson(json)).toList();
+      return results.map((json) => Person.fromSearchJson(json)).toList();
     } else {
       throw Exception('Failed to search persons');
     }

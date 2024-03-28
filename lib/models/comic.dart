@@ -52,4 +52,6 @@ class Comic{
       apiDetailUrl: apiDetailUrl,
     );
   }
+
+
 }

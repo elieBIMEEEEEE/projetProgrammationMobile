@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projet/models/character.dart';
-import 'package:projet/models/comics.dart';
-import 'package:projet/models/series.dart';
-import 'package:projet/repositories/comics_repository.dart';
 import 'package:projet/repositories/series_repository.dart';
+import 'package:projet/repositories/comic_repository.dart';
+import 'package:projet/repositories/person_repository.dart';
 
+import '../models/comic.dart';
+import '../models/person.dart';
 import '../repositories/character_repository.dart';
 
 abstract class SearchEvent extends Equatable {
@@ -37,13 +38,13 @@ class SearchLoading extends SearchState {
 
 class SearchSuccess extends SearchState {
   final List<Character> characters;
-  final List<Series> series;
-  final List<Comics> comics;
+  final List<Comic> comics;
+  final List<Person> persons;
 
-  SearchSuccess(this.characters, this.series, this.comics);
+  SearchSuccess(this.characters, this.persons, this.comics);
 
   @override
-  List<Object> get props => [characters, series, comics];
+  List<Object> get props => [characters, persons, comics];
 }
 
 class SearchFailure extends SearchState {
@@ -57,12 +58,12 @@ class SearchFailure extends SearchState {
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final CharacterRepository characterRepository;
-  final SeriesRepository seriesRepository;
-  final ComicsRepository comicRepository;
+  final PersonRepository personRepository;
+  final ComicRepository comicRepository;
 
   SearchBloc({
     required this.characterRepository,
-    required this.seriesRepository,
+    required this.personRepository,
     required this.comicRepository,
   }) : super(SearchInitial()) {
     on<SearchQueryChanged>(_onSearchQueryChanged);
@@ -79,9 +80,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     emit(SearchLoading());
     try {
       final characters = await characterRepository.searchCharacters(event.query);
-      final series = await seriesRepository.searchSeries(event.query);
+      final persons = await personRepository.searchPersons(event.query);
       final comics = await comicRepository.searchComics(event.query);
-      emit(SearchSuccess(characters, series, comics));
+      emit(SearchSuccess(characters, persons, comics));
     } catch (error) {
       emit(SearchFailure(error.toString()));
     }

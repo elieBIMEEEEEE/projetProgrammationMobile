@@ -16,4 +16,17 @@ class ComicRepository {
       throw Exception('Failed to load comics. Status code: ${response.statusCode}');
     }
   }
+
+  Future<List<Comic>> searchComics(String query) async {
+    final url = Uri.parse('https://comicvine.gamespot.com/api/search?api_key=$_apiKey&format=json&resources=issue&query=$query');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final results = List<Map<String, dynamic>>.from(data['results']);
+      return results.map((json) => Comic.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to search comics. Status code: ${response.statusCode}');
+    }
+  }
 }

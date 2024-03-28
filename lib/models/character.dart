@@ -25,4 +25,20 @@ class Character {
   void updateFromJson(Map<String, dynamic> json) {
     imageUrl = json['image'] != null ? json['image']['original_url'] ?? 'path/to/image' : 'path/to/image';
   }
+
+  factory Character.fromSearchJson(Map<String, dynamic> json) {
+    String id = json['id']?.toString() ?? '0000';
+    String name = json['name']?.toString() ?? 'Unknown';
+    String imageUrl = json['image'] != null ? json['image']['original_url'] ?? 'path/to/image' : 'path/to/image';
+    String apiDetailUrl = json['api_detail_url']?.toString() ?? 'Unknown';
+
+    Character character = Character(
+      id: id,
+      name: name,
+      apiDetailUrl: apiDetailUrl,
+    );
+    character.imageUrl = imageUrl;
+
+    return character;
+  }
 }

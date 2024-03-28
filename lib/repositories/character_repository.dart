@@ -22,6 +22,7 @@ class CharacterRepository {
   }
 
   Future<List<Character>> fetchCharactersDetails(List<Character> characters) async {
+    characters = characters.sublist(0, 10);
     final List<Future<Character>> futures = characters.map((character) async {
       final url = Uri.parse(
           '${character.apiDetailUrl}?api_key=$_apiKey&format=json&field_list=image');
@@ -47,7 +48,7 @@ class CharacterRepository {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final results = List<Map<String, dynamic>>.from(data['results']);
-      return results.map((json) => Character.fromJson(json)).toList();
+      return results.map((json) => Character.fromSearchJson(json)).toList();
     } else {
       throw Exception('Failed to search characters');
     }
