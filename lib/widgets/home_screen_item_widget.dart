@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projet/models/comics.dart';
-import 'package:projet/models/movie.dart';
+import 'package:projet/models/movies.dart';
 import 'package:projet/models/series.dart';
 import 'package:projet/screens/comic_detail_screen.dart';
 import 'package:projet/screens/movie_detail_screen.dart';
 import 'package:projet/screens/series_detail_screen.dart';
+
 
 class ItemWidget extends StatelessWidget {
   final dynamic item;
@@ -30,7 +31,7 @@ class ItemWidget extends StatelessWidget {
                 builder: (context) =>
                     ComicDetailScreen(apiDetailUrl: item.apiDetailUrl)),
           );
-        } else if (item is Movie) {
+        } else if (item is Movies) {
           Navigator.push(
             context,
             MaterialPageRoute(

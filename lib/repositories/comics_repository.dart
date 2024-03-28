@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/comics.dart';
+import 'common_method.dart';
+
 
 class ComicsRepository {
   final String _baseUrl = 'https://comicvine.gamespot.com/api';
@@ -15,7 +17,7 @@ class ComicsRepository {
       final results = List<Map<String, dynamic>>.from(data['results']);
       return results.map((json) => Comics.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load comics');
+      return handleError(response.statusCode);
     }
   }
 }

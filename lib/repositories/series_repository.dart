@@ -7,7 +7,7 @@ class SeriesRepository {
   final String _apiKey = '6db50ee6d46842bad12ce3ecbf244c7aae2f9041';
 
   Future<List<Series>> fetchSeries({int limit = 10}) async {
-    final url = Uri.parse('$_baseUrl/series_list?api_key=$_apiKey&format=json&limit=$limit&offset=10');
+    final url = Uri.parse('$_baseUrl/series_list?api_key=$_apiKey&format=json&limit=$limit&offset=10&field_list=name,api_detail_url,image,deck,description');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -20,7 +20,7 @@ class SeriesRepository {
   }
 
   Future<List<Series>> searchSeries(String query) async {
-    final url = Uri.parse('$_baseUrl/search?api_key=$_apiKey&format=json&resources=series&query=$query');
+    final url = Uri.parse('$_baseUrl/search?api_key=$_apiKey&format=json&resources=series&query=$query&field_list=name,api_detail_url,image,deck,description');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
