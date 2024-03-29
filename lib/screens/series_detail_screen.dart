@@ -12,6 +12,7 @@ import '../models/character.dart';
 import '../models/episode.dart';
 import '../models/movie.dart';
 import '../models/serie.dart';
+import 'character_detail_screen.dart';
 
 class SerieDetailScreen extends StatefulWidget {
   final String apiDetailUrl;
@@ -78,7 +79,7 @@ class _SerieDetailScreenState extends State<SerieDetailScreen>
           } else if (state is SerieLoaded &&
               state.serie.apiDetailUrl == widget.apiDetailUrl) {
             context.read<CharacterBloc>().add(
-                FetchsCharacterDetails(characters: state.serie.characters));
+                FetchsCharacterImage(characters: state.serie.characters));
             return _buildMovieDetail(context, state.serie);
           } else if (state is SerieError) {
             return Center(
@@ -281,9 +282,9 @@ class _SerieDetailScreenState extends State<SerieDetailScreen>
     } else {
       return BlocBuilder<CharacterBloc, CharacterState>(
         builder: (context, state) {
-          if (state is CharactersDetailsLoading) {
+          if (state is CharactersImageLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is CharactersDetailsLoaded) {
+          } else if (state is CharactersImageLoaded) {
             return ListView.builder(
               itemCount: state.characters.length,
               itemBuilder: (context, index) {
@@ -301,10 +302,20 @@ class _SerieDetailScreenState extends State<SerieDetailScreen>
                     state.characters[index].name,
                     style: const TextStyle(color: Colors.white),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CharacterDetailScreen(
+                              character: state.characters[index]);
+                        },
+                      ));
+                  },
                 );
               },
             );
-          } else if (state is CharactersDetailsError) {
+          } else if (state is CharactersImageError) {
             return Center(
                 child: Text('Erreur: ${state.message}',
                     style: const TextStyle(color: Colors.white)));

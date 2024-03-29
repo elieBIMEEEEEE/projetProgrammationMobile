@@ -24,7 +24,7 @@ class PersonRepository {
 
   Future<List<Person>> searchPersons(String query) async {
     final url = Uri.parse('$_baseUrl/search?api_key=$_apiKey&format=json&resources=person&query=$query&field_list=id,name,image,api_detail_url');
-    return await _performRequest(url);
+    return await _performRequestSearch(url);
   }
 
   Future<List<Person>> _performRequest(Uri url) async {
@@ -34,6 +34,18 @@ class PersonRepository {
       final data = json.decode(response.body);
       final results = List<Map<String, dynamic>>.from(data['results']);
       return results.map((json) => Person.fromJson(json)).toList();
+    } else {
+      return handleError(response.statusCode);
+    }
+  }
+
+  Future<List<Person>> _performRequestSearch(Uri url) async {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final results = List<Map<String, dynamic>>.from(data['results']);
+      return results.map((json) => Person.fromSearchJson(json)).toList();
     } else {
       return handleError(response.statusCode);
     }

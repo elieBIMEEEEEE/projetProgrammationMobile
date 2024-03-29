@@ -11,6 +11,7 @@ import '../blocs/comic_bloc.dart';
 import '../models/character.dart';
 import '../models/comic.dart';
 import '../models/person.dart';
+import 'character_detail_screen.dart';
 
 class ComicDetailScreen extends StatefulWidget {
   final String apiDetailUrl;
@@ -330,12 +331,12 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
     } else {
       context
           .read<CharacterBloc>()
-          .add(FetchsCharacterDetails(characters: characters));
+          .add(FetchsCharacterImage(characters: characters));
       return BlocBuilder<CharacterBloc, CharacterState>(
         builder: (context, state) {
-          if (state is CharactersDetailsLoading) {
+          if (state is CharactersImageLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is CharactersDetailsLoaded) {
+          } else if (state is CharactersImageLoaded) {
             return ListView.builder(
               itemCount: state.characters.length,
               itemBuilder: (context, index) {
@@ -353,10 +354,20 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
                     state.characters[index].name,
                     style: const TextStyle(color: Colors.white),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CharacterDetailScreen(
+                              character: state.characters[index]);
+                        },
+                      ));
+                  },
                 );
               },
             );
-          } else if (state is CharactersDetailsError) {
+          } else if (state is CharactersImageError) {
             return Center(
                 child: Text('Erreur: ${state.message}',
                     style: const TextStyle(color: Colors.white)));

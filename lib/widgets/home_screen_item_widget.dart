@@ -6,6 +6,8 @@ import 'package:projet/screens/comic_detail_screen.dart';
 import 'package:projet/screens/movie_detail_screen.dart';
 import 'package:projet/screens/series_detail_screen.dart';
 
+import '../screens/character_detail_screen.dart';
+
 
 class ItemWidget extends StatelessWidget {
   final dynamic item;
@@ -45,6 +47,13 @@ class ItemWidget extends StatelessWidget {
                 builder: (context) =>
                     SerieDetailScreen(apiDetailUrl: item.apiDetailUrl)),
           );
+        } else if (item is Characters) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CharacterDetailScreen(character: item)),
+            );
         }
       },
       child: Container(

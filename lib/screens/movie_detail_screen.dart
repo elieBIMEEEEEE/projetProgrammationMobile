@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projet/screens/character_detail_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_svg/svg.dart';
 import '../blocs/character_bloc.dart';
@@ -73,8 +74,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
             return const Center(child: CircularProgressIndicator());
           } else if (state is MovieLoaded &&
               state.movie.apiDetailUrl == widget.apiDetailUrl) {
-            context.read<CharacterBloc>().add(
-                FetchsCharacterDetails(characters: state.movie.characters));
+            context
+                .read<CharacterBloc>()
+                .add(FetchsCharacterImage(characters: state.movie.characters));
             return _buildMovieDetail(context, state.movie);
           } else if (state is MovieError) {
             return Center(
@@ -262,9 +264,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
     } else {
       return BlocBuilder<CharacterBloc, CharacterState>(
         builder: (context, state) {
-          if (state is CharactersDetailsLoading) {
+          if (state is CharactersImageLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is CharactersDetailsLoaded) {
+          } else if (state is CharactersImageLoaded) {
             return ListView.builder(
               itemCount: state.characters.length,
               itemBuilder: (context, index) {
@@ -282,10 +284,21 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
                     state.characters[index].name,
                     style: const TextStyle(color: Colors.white),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return CharacterDetailScreen(
+                              character: state.characters[index]);
+                        },
+                      ),
+                    );
+                  },
                 );
               },
             );
-          } else if (state is CharactersDetailsError) {
+          } else if (state is CharactersImageError) {
             return Center(
                 child: Text('Erreur: ${state.message}',
                     style: const TextStyle(color: Colors.white)));
