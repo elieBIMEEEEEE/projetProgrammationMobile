@@ -134,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 opacity: 0.9,
                 child: SvgPicture.asset(
                   'assets/images/astronaut.svg',
-                  // Set the width and height as needed
                 ),
               ),
             ),

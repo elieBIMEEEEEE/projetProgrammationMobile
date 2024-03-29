@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen_item_widget.dart'; // Assurez-vous que le chemin d'importation est correct
+import 'home_screen_item_widget.dart';
 
 class ItemsListWidget<T> extends StatelessWidget {
   final String title;

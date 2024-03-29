@@ -79,7 +79,7 @@ class _SeriesListScreenState extends State<SeriesListScreen> {
             return const Center(
                 child: Text('Erreur: Impossible de charger les comics'));
           }
-          return Container(); // Fallback empty container
+          return Container();
         },
       ),
     );

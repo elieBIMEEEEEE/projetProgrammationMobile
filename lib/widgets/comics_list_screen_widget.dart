@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:projet/screens/comic_detail_screen.dart';
 
-import '../models/comics.dart'; // Replace with the correct path to your Comic model
+import '../models/comics.dart';
 
 class ComicCard extends StatelessWidget {
   final Comics comic;
@@ -44,7 +44,7 @@ class ComicCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8), // Apply the border radius here
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.network(
                         comic.imageUrl,
                         width: 80,
