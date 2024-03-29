@@ -42,7 +42,7 @@ class SeriesCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8), // Apply the border radius here
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.network(
                         serie.imageUrl,
                         width: 120,

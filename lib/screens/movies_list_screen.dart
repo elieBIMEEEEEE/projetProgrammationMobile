@@ -55,10 +55,10 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               fontSize: 33,
               fontWeight: FontWeight.bold,
             ),
-            maxLines: 2, // Permet au texte de s'étendre sur deux lignes
+            maxLines: 2,
           ),
         ),
-        toolbarHeight: 100, // Augmente la hauteur de l'AppBar
+        toolbarHeight: 100,
       ),
       body: BlocBuilder<MoviesBloc, MoviesState>(
         builder: (context, state) {
@@ -80,7 +80,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
             return const Center(
                 child: Text('Erreur: Impossible de charger les comics'));
           }
-          return Container(); // Fallback empty container
+          return Container();
         },
       ),
     );
