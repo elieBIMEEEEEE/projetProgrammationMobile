@@ -268,6 +268,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
             return const Center(child: CircularProgressIndicator());
           } else if (state is CharactersImageLoaded) {
             return ListView.builder(
+              padding: const EdgeInsets.only(top: 10),
               itemCount: state.characters.length,
               itemBuilder: (context, index) {
                 return ListTile(
@@ -334,6 +335,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen>
               style: TextStyle(color: Colors.white)));
     } else {
       return ListView(
+        padding: const EdgeInsets.only(top: 10),
         children: [
           _buildDetailItem('Classification', movie.rating),
           _buildDetailItem(
