@@ -6,8 +6,8 @@ class SeriesRepository {
   final String _baseUrl = 'https://comicvine.gamespot.com/api';
   final String _apiKey = '6db50ee6d46842bad12ce3ecbf244c7aae2f9041';
 
-  Future<List<Series>> fetchSeries({int limit = 10}) async {
-    final url = Uri.parse('$_baseUrl/series_list?api_key=$_apiKey&format=json&limit=$limit&offset=10');
+  Future<List<Series>> fetchSeries({int limit = 10, int offset = 0}) async {
+    final url = Uri.parse('$_baseUrl/series_list?api_key=$_apiKey&format=json&limit=$limit&offset=$offset&field_list=id,name,image,publisher,count_of_episodes,start_year,api_detail_url');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -20,7 +20,7 @@ class SeriesRepository {
   }
 
   Future<List<Series>> searchSeries(String query) async {
-    final url = Uri.parse('$_baseUrl/search?api_key=$_apiKey&format=json&resources=series&query=$query');
+    final url = Uri.parse('$_baseUrl/search?api_key=$_apiKey&format=json&resources=series&query=$query&field_list=id,name,image,publisher,count_of_episodes,start_year,api_detail_url');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

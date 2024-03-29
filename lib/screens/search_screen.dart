@@ -63,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
               controller: _searchController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                  hintText: 'Comic, film, série...',
+                  hintText: 'Personnages, Personnes, Comics...',
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
                   fillColor: const Color(0xFF15232E),

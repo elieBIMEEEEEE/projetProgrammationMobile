@@ -14,12 +14,21 @@ class FetchCharacters extends CharacterEvent {
   FetchCharacters({this.limit = 50});
 }
 
-class FetchsCharacterDetails extends CharacterEvent {
+class FetchsCharacterImage extends CharacterEvent {
   final List<Character> characters;
-  FetchsCharacterDetails({required this.characters});
+  FetchsCharacterImage({required this.characters});
 
   @override
   List<Object> get props => [characters];
+}
+
+class FetchCharacterDetails extends CharacterEvent {
+  final Character character;
+
+  FetchCharacterDetails({required this.character});
+
+  @override
+  List<Object> get props => [character];
 }
 
 // States
@@ -44,30 +53,43 @@ class CharacterError extends CharacterState {
   CharacterError(this.message);
 }
 
-class CharactersDetailsLoading extends CharacterState {}
+class CharactersImageLoading extends CharacterState {}
 
-class CharactersDetailsLoaded extends CharacterState {
+class CharactersImageLoaded extends CharacterState {
   final List<Character> characters;
 
-  CharactersDetailsLoaded(this.characters);
+  CharactersImageLoaded(this.characters);
 }
 
-class CharactersDetailsError extends CharacterState {
+class CharactersImageError extends CharacterState {
   final String message;
 
-  CharactersDetailsError(this.message);
+  CharactersImageError(this.message);
+}
+
+class CharacterDetailsLoading extends CharacterState {}
+
+class CharacterDetailsLoaded extends CharacterState {
+  final Character character;
+
+  CharacterDetailsLoaded(this.character);
+}
+
+class CharacterDetailsError extends CharacterState {
+  final String message;
+
+  CharacterDetailsError(this.message);
 }
 
 
-
-// Bloc
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   final CharacterRepository characterRepository;
 
   CharacterBloc({required this.characterRepository})
       : super(CharacterInitial()) {
     on<FetchCharacters>(onFetchCharacters);
-    on<FetchsCharacterDetails>(onFetchsCharacterDetails);
+    on<FetchsCharacterImage>(onFetchsCharacterImage);
+    on<FetchCharacterDetails>(onFetchCharacterDetails);
   }
 
   void onFetchCharacters(
@@ -82,13 +104,23 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     }
   }
 
-  void onFetchsCharacterDetails(FetchsCharacterDetails event, Emitter<CharacterState> emit) async {
-    emit(CharactersDetailsLoading());
+  void onFetchsCharacterImage(FetchsCharacterImage event, Emitter<CharacterState> emit) async {
+    emit(CharactersImageLoading());
     try {
-      final characters = await characterRepository.fetchCharactersDetails(event.characters);
-      emit(CharactersDetailsLoaded(characters));
+      final characters = await characterRepository.fetchCharactersImage(event.characters);
+      emit(CharactersImageLoaded(characters));
     } catch (e) {
-      emit(CharactersDetailsError(e.toString()));
+      emit(CharactersImageError(e.toString()));
+    }
+  }
+
+  void onFetchCharacterDetails(FetchCharacterDetails event, Emitter<CharacterState> emit) async {
+    emit(CharacterDetailsLoading());
+    try {
+      final character = await characterRepository.fetchCharacterDetails(event.character);
+      emit(CharacterDetailsLoaded(character));
+    } catch (e) {
+      emit(CharacterDetailsError(e.toString()));
     }
   }
 

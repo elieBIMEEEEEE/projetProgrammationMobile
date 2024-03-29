@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:projet/models/comics.dart';
-import 'package:projet/models/movie.dart';
+import 'package:projet/models/movies.dart';
 import 'package:projet/models/series.dart';
 import 'package:projet/screens/comic_detail_screen.dart';
 import 'package:projet/screens/movie_detail_screen.dart';
 import 'package:projet/screens/series_detail_screen.dart';
+
+import '../models/character.dart';
+import '../models/comic.dart';
+import '../models/person.dart';
+import '../screens/character_detail_screen.dart';
+
 
 class ItemWidget extends StatelessWidget {
   final dynamic item;
@@ -30,7 +36,7 @@ class ItemWidget extends StatelessWidget {
                 builder: (context) =>
                     ComicDetailScreen(apiDetailUrl: item.apiDetailUrl)),
           );
-        } else if (item is Movie) {
+        } else if (item is Movies) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -43,6 +49,20 @@ class ItemWidget extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) =>
                     SerieDetailScreen(apiDetailUrl: item.apiDetailUrl)),
+          );
+        } else if (item is Character) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CharacterDetailScreen(character: item)),
+            );
+        } else if (item is Comic) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ComicDetailScreen(apiDetailUrl: item.apiDetailUrl)),
           );
         }
       },

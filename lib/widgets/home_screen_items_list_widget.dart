@@ -19,13 +19,11 @@ class ItemsListWidget<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E3243), // Couleur de l'arrière-plan des cartes
-        borderRadius: BorderRadius.circular(20), // Bords arrondis
+        color: const Color(0xFF1E3243),
+        borderRadius: BorderRadius.circular(20),
       ),
       margin: const EdgeInsets.all(8.0),
-      // Marge extérieure pour séparer les éléments
       padding: const EdgeInsets.all(8.0),
-      // Padding intérieur
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
