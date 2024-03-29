@@ -233,10 +233,21 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
 
   Widget _buildWebView(String url) {
     if (url.isEmpty) {
-      return const Center(
-          child: Text(
-              "Aucune description n'est disponible dans notre base de données.",
-              style: TextStyle(color: Colors.white)));
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.info, color: Colors.white, size: 50),
+            Text(
+              "Aucune description n'est disponible pour ce comic.",
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
     } else {
       return WebView(
         initialUrl: 'about:blank',
@@ -273,10 +284,21 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
 
   Widget _buildCreators(List<Person> characters) {
     if (characters.isEmpty) {
-      return const Center(
-          child: Text(
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.person, color: Colors.white, size: 50),
+            Text(
               "Aucun auteur n'est disponible dans notre base de données.",
-              style: TextStyle(color: Colors.white)));
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
     } else {
       context.read<PersonBloc>().add(FetchPersonDetails(persons: characters));
       return BlocBuilder<PersonBloc, PersonState>(
@@ -285,6 +307,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
             return const Center(child: CircularProgressIndicator());
           } else if (state is PersonsDetailsLoaded) {
             return ListView.builder(
+              padding: const EdgeInsets.only(top: 10),
               itemCount: state.persons.length,
               itemBuilder: (context, index) {
                 return ListTile(
@@ -324,10 +347,21 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
 
   Widget _buildCharacters(List<Character> characters) {
     if (characters.isEmpty) {
-      return const Center(
-          child: Text(
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.person, color: Colors.white, size: 50),
+            Text(
               "Aucun personnage n'est disponible dans notre base de données.",
-              style: TextStyle(color: Colors.white)));
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
     } else {
       context
           .read<CharacterBloc>()
@@ -338,6 +372,7 @@ class _ComicDetailScreenState extends State<ComicDetailScreen>
             return const Center(child: CircularProgressIndicator());
           } else if (state is CharactersImageLoaded) {
             return ListView.builder(
+              padding: const EdgeInsets.only(top: 10),
               itemCount: state.characters.length,
               itemBuilder: (context, index) {
                 return ListTile(

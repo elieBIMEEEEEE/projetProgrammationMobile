@@ -23,7 +23,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     context
         .read<CharacterBloc>()
         .add(FetchCharacterDetails(character: widget.character));
@@ -197,6 +197,7 @@ class _CharacterDetailScreenState extends State<CharacterDetailScreen>
 
   Widget _buildInfos(Character character) {
     return ListView(
+      padding: const EdgeInsets.only(top: 10),
       children: [
         _buildDetailItem('Nom de super-héros', character.name),
         _buildDetailItem(

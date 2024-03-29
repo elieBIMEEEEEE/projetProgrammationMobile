@@ -286,6 +286,7 @@ class _SerieDetailScreenState extends State<SerieDetailScreen>
             return const Center(child: CircularProgressIndicator());
           } else if (state is CharactersImageLoaded) {
             return ListView.builder(
+              padding: const EdgeInsets.only(top: 10),
               itemCount: state.characters.length,
               itemBuilder: (context, index) {
                 return ListTile(
@@ -338,6 +339,7 @@ class _SerieDetailScreenState extends State<SerieDetailScreen>
       );
     } else {
       return ListView.builder(
+        padding: const EdgeInsets.only(top: 10),
         itemCount: episodes.length,
         itemBuilder: (context, index) {
           return Container(
